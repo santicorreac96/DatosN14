@@ -40,7 +40,9 @@ public class TablaHash<E,K> implements ITablaHash<E, K>
 	private int funcion(K pLlave)
 	{
 		int valor = (Integer) pLlave;
+		int cambio = 0;
 		return valor;
+		
 		
 	}
 
