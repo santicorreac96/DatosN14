@@ -7,7 +7,7 @@ public interface ICeldaTabla <E,K>
 	
 	public abstract K darLlave();
 	
-	public abstract void modificarElementos(E pElementos);
+	public abstract void modificarElemento(E pElemento);
 	
 	
 	

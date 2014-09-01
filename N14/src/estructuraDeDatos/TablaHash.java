@@ -7,15 +7,18 @@ import estructuraDatos.ListaEncadenadaDoble;
 public class TablaHash<E,K> implements ITablaHash<E, K>
 {
 	
-	private  ListaEncadenadaDoble<E>[] celdas;
+	private  ListaEncadenadaDoble<CeldaTabla<E, K>>[] celdas;
 	
 	private int cantidadElementos;
 
-	@Override
-	public void agregar(E nElemento, K nLlave, Comparator<E> comparador) 
+	public void agregar(E nElemento, K nLlave, Comparator<CeldaTabla<E, K>> comparador) 
 	{
 		int pos = funcion(nLlave);
-		celdas[pos].adicionar(nElemento, comparador);	
+		CeldaTabla<E,K> celdaMeter = new CeldaTabla(nElemento, nLlave);
+		if(celdas[pos].buscarElemento(celdaMeter,comparador)==null)
+		{
+			celdas[pos].adicionar(celdaMeter, comparador);
+		}
 		cantidadElementos++;
 	}
 
@@ -41,7 +44,6 @@ public class TablaHash<E,K> implements ITablaHash<E, K>
 	private int funcion(K pLlave)
 	{
 		int valor = (Integer) pLlave;
-		int cambio = 0;
 		return valor;
 		
 		
