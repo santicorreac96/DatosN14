@@ -1,9 +1,11 @@
 package estructuraDeDatos;
 
+import java.util.Comparator;
+
 public interface ITablaHash <E,K>
 {
 	
-public abstract E agregar(E nElemento, K nLlave);
+public abstract void agregar(E nElemento, K nLlave,Comparator<E> comparador);
 	
 	public abstract E darElemento(K pLlave);
 	

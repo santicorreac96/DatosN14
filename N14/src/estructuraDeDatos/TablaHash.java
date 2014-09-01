@@ -1,17 +1,22 @@
 package estructuraDeDatos;
 
+import java.util.Comparator;
+
 import estructuraDatos.ListaEncadenadaDoble;
 
 public class TablaHash<E,K> implements ITablaHash<E, K>
 {
 	
-	private  ListaEncadenadaDoble<K>[] celdas;
+	private  ListaEncadenadaDoble<E>[] celdas;
+	
+	private int cantidadElementos;
 
 	@Override
-	public E agregar(E nElemento, K nLlave) 
+	public void agregar(E nElemento, K nLlave, Comparator<E> comparador) 
 	{
 		int pos = funcion(nLlave);
-		celdas[pos].adicionar(nElemento, comparador);						
+		celdas[pos].adicionar(nElemento, comparador);	
+		cantidadElementos++;
 	}
 
 	@Override
@@ -35,6 +40,7 @@ public class TablaHash<E,K> implements ITablaHash<E, K>
 	private int funcion(K pLlave)
 	{
 		int valor = (Integer) pLlave;
+		return valor;
 		
 	}
 
