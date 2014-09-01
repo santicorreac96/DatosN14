@@ -1,12 +1,17 @@
 package estructuraDeDatos;
 
+import estructuraDatos.ListaEncadenadaDoble;
+
 public class TablaHash<E,K> implements ITablaHash<E, K>
 {
+	
+	private  ListaEncadenadaDoble<K>[] celdas;
 
 	@Override
-	public E agregar(E nElemento, K nLlave) {
-		// TODO Auto-generated method stub
-		return null;
+	public E agregar(E nElemento, K nLlave) 
+	{
+		int pos = funcion(nLlave);
+		celdas[pos].adicionar(nElemento, comparador);						
 	}
 
 	@Override
@@ -25,6 +30,12 @@ public class TablaHash<E,K> implements ITablaHash<E, K>
 	public int darCantidadElementos() {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+	
+	private int funcion(K pLlave)
+	{
+		int valor = (Integer) pLlave;
+		
 	}
 
 }
