@@ -21,6 +21,7 @@ public class TablaHash<E,K> implements ITablaHash<E, K>
 
 	@Override
 	public E darElemento(K pLlave) {
+		cantidadElementos++;
 		// TODO Auto-generated method stub
 		return null;
 	}
