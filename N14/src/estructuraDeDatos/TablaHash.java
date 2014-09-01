@@ -4,7 +4,7 @@ import java.util.Comparator;
 
 import estructuraDatos.ListaEncadenadaDoble;
 
-public class TablaHash<E,K> implements ITablaHash<E, K>
+public class TablaHash<E,K extends String> implements ITablaHash<E, K >
 {
 	
 	private  ListaEncadenadaDoble<CeldaTabla<E, K>>[] celdas;
@@ -43,10 +43,17 @@ public class TablaHash<E,K> implements ITablaHash<E, K>
 	
 	private int funcion(K pLlave)
 	{
-		int valor = (Integer) pLlave;
+		int valor = 0 ; 
+		String[] pedazos = pLlave.split("-");
+		for(int i = 0 ; i<pedazos.length;i++)
+		{
+			char[] letras = pedazos[i].toCharArray();
+			for(int j = 0 ; j<letras.length;j++)
+			{
+				valor += (int) letras[j]-64;
+			}
+		}
 		return valor;
-		
-		
 	}
 
 }

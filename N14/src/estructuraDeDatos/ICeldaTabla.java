@@ -1,6 +1,6 @@
 package estructuraDeDatos;
 
-public interface ICeldaTabla <E,K>
+public interface ICeldaTabla <E,K extends String>
 {
 	
 	public abstract E darElemento();

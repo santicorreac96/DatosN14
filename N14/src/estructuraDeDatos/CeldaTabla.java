@@ -1,6 +1,6 @@
 package estructuraDeDatos;
 
-public class CeldaTabla<E,K> implements ICeldaTabla<E, K>
+public class CeldaTabla<E,K extends String> implements ICeldaTabla<E, K >
 {
 	private E elementoActual;
 	
