@@ -32,23 +32,29 @@ public class TablaHash<E,K extends String> implements ITablaHash<E, K >
 	}
 
 	@Override
-	public E darElemento(K pLlave) {
-
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public E eliminar(E elemento ,K pLlave, Comparator<E> comparador) 
+	public E darElemento(K pLlave, Comparator<CeldaTabla<E, K>> comparador) 
 	{
 		int pos = funcion(pLlave);
-		celdas[pos].eliminar(elemento, comparador);
+		CeldaTabla<E,K> buscada = new CeldaTabla(null, pLlave);
+		CeldaTabla<E,K> encontrada = celdas[pos].buscarElemento(buscada, comparador);
+		return encontrada.darElemento();
+		
 	}
 
 	@Override
-	public int darCantidadElementos() {
-		// TODO Auto-generated method stub
-		return 0;
+	public void  eliminar(K pLlave, Comparator<CeldaTabla<E, K>> comparador) throws Exception 
+	{
+		int pos = funcion(pLlave);
+		CeldaTabla<E,K> buscada = new CeldaTabla(null, pLlave);
+		CeldaTabla<E,K> encontrada = celdas[pos].buscarElemento(buscada, comparador);
+		celdas[pos].eliminar(encontrada, comparador);
+		cantidadElementos--;
+	}
+
+	@Override
+	public int darCantidadElementos() 
+	{
+		return cantidadElementos;
 	}
 	
 	private int funcion(K pLlave)
