@@ -8,31 +8,41 @@ public class TablaHash<E,K extends String> implements ITablaHash<E, K >
 {
 	
 	private  ListaEncadenadaDoble<CeldaTabla<E, K>>[] celdas;
-	
-	private int cantidadElementos;
 
-	public void agregar(E nElemento, K nLlave, Comparator<CeldaTabla<E, K>> comparador) 
+	private int cantidadElementos;
+	
+	public TablaHash()
+	{
+		celdas =  new ListaEncadenadaDoble[5000];
+
+		for(int i =  0; i< celdas.length;i++)
+		{
+			celdas[i] = new ListaEncadenadaDoble<CeldaTabla<E,K>>();
+		}
+
+	}
+
+	public int agregar(E nElemento, K nLlave, Comparator<CeldaTabla<E, K>> comparador) 
 	{
 		int pos = funcion(nLlave);
 		CeldaTabla<E,K> celdaMeter = new CeldaTabla(nElemento, nLlave);
-		if(celdas[pos].buscarElemento(celdaMeter,comparador)==null)
-		{
-			celdas[pos].adicionar(celdaMeter, comparador);
-		}
+		celdas[pos].adicionar(celdaMeter, comparador);
 		cantidadElementos++;
+		return pos;
 	}
 
 	@Override
 	public E darElemento(K pLlave) {
-		cantidadElementos++;
+
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public E eliminar(K pLlave) {
-		// TODO Auto-generated method stub
-		return null;
+	public E eliminar(E elemento ,K pLlave, Comparator<E> comparador) 
+	{
+		int pos = funcion(pLlave);
+		celdas[pos].eliminar(elemento, comparador);
 	}
 
 	@Override
@@ -43,17 +53,8 @@ public class TablaHash<E,K extends String> implements ITablaHash<E, K >
 	
 	private int funcion(K pLlave)
 	{
-		int valor = 0 ; 
-		String[] pedazos = pLlave.split("-");
-		for(int i = 0 ; i<pedazos.length;i++)
-		{
-			char[] letras = pedazos[i].toCharArray();
-			for(int j = 0 ; j<letras.length;j++)
-			{
-				valor += (int) letras[j]-64;
-			}
-		}
-		return valor;
+		int valor = Integer.parseInt(pLlave);
+		return Math.abs(valor-1)%5000;
 	}
 
 }

@@ -2,6 +2,7 @@ package mundo;
 
 import java.io.File;
 
+import estructuraDatos.ListaEncadenadaDoble;
 import estructuraDeDatos.ITablaHash;
 import estructuraDeDatos.TablaHash;
 import jxl.Cell;
@@ -12,10 +13,12 @@ public class ConsultorRestaurantes implements IConsultorRestaurantes
 {
 	
 	private ITablaHash<Restaurante, String> tabla;
+	private ListaEncadenadaDoble<String> ids;
 	
 	public ConsultorRestaurantes()
 	{
 		tabla  = new TablaHash<Restaurante, String>();
+		ids = new ListaEncadenadaDoble<String>();
 		
 	}
 
@@ -54,13 +57,16 @@ public class ConsultorRestaurantes implements IConsultorRestaurantes
 				cocina = cocina.replace("[", "");
 				cocina = cocina.replace("]", "");
 				Restaurante r = new Restaurante(nombre, ciudad, estado);
-				System.out.println(r.getID());
+				ids.adicionar(r.getID(), new comparadorID());
+				String  id = ids.buscarElemento(r.getID(), new comparadorID() ).hashCode()+"";
+				System.out.println(tabla.agregar(r, id, new comparadorNombre())+"\t"+r.getID());
 			}
+			System.out.println("Leyo ultimo");
 
 		}
 		catch ( Exception e)
 		{
-			System.out.println(e.getMessage());
+			System.out.println("excepcion" + e.getMessage());
 		}
 		
 	}
