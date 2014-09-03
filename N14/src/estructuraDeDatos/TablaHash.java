@@ -3,12 +3,13 @@ package estructuraDeDatos;
 import java.util.Comparator;
 
 import mundo.comparadorNombre;
+import estructuraDatos.IListaEncadenadaDoble;
 import estructuraDatos.ListaEncadenadaDoble;
 
 public class TablaHash<E,K extends String> implements ITablaHash<E, K >
 {
 	
-	private  ListaEncadenadaDoble<CeldaTabla<E, K>>[] celdas;
+	private  IListaEncadenadaDoble<CeldaTabla<E, K>>[] celdas;
 
 	private int cantidadElementos;
 
@@ -83,7 +84,7 @@ public class TablaHash<E,K extends String> implements ITablaHash<E, K >
 	{
 		int tamanoant = tamano;
 		tamano  = tamano *2;
-		 ListaEncadenadaDoble<CeldaTabla<E, K>>[] anterior = celdas;
+		 IListaEncadenadaDoble<CeldaTabla<E, K>>[] anterior = celdas;
 		 celdas =  new ListaEncadenadaDoble[tamano];
 
 			for(int i =  0; i< celdas.length;i++)
@@ -93,7 +94,7 @@ public class TablaHash<E,K extends String> implements ITablaHash<E, K >
 			cantidadElementos=0;
 		for(int i = 0 ; i<tamanoant;i++)
 		{
-			ListaEncadenadaDoble<CeldaTabla<E, K>> reshash =  anterior[i];
+			IListaEncadenadaDoble<CeldaTabla<E, K>> reshash =  anterior[i];
 			
 			if(reshash.darTamano()>0)
 			{
