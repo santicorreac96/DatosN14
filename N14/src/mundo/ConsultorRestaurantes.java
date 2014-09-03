@@ -13,12 +13,14 @@ public class ConsultorRestaurantes implements IConsultorRestaurantes
 {
 	
 	private ITablaHash<Restaurante, String> tabla;
-	private ListaEncadenadaDoble<String> ids;
+	private Restaurante[] restauranteArregloPrueba;
+	private int indiceActual;
 	
 	public ConsultorRestaurantes()
 	{
 		tabla  = new TablaHash<Restaurante, String>();
-		ids = new ListaEncadenadaDoble<String>();
+		restauranteArregloPrueba = new Restaurante[5000];
+		indiceActual = 0;
 		
 	}
 
@@ -56,17 +58,17 @@ public class ConsultorRestaurantes implements IConsultorRestaurantes
 				cocina = cocina.replace("\"", "");
 				cocina = cocina.replace("[", "");
 				cocina = cocina.replace("]", "");
-				Restaurante r = new Restaurante(nombre, ciudad, estado);
-				ids.adicionar(r.getID(), new comparadorID());
-				String  id = ids.buscarElemento(r.getID(), new comparadorID() ).hashCode()+"";
-				System.out.println(tabla.agregar(r, id, new comparadorNombre())+"\t"+r.getID());
+				Restaurante r = new Restaurante(nombre, ciudad, estado,direccion,post,telefono,fax,latitud,longitud,barrio,web,email,categoria,horario,cocina);
+				tabla.agregar(r, r.getID(), new comparadorNombre());
+				restauranteArregloPrueba[indiceActual] = r;
+				indiceActual++;
 			}
 			System.out.println("Leyo ultimo");
 
 		}
 		catch ( Exception e)
 		{
-			System.out.println("excepcion" + e.getMessage());
+			System.out.println("excepcion en metodo cargar xls" + e.getMessage()+indiceActual);
 		}
 		
 	}

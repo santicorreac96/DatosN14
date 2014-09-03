@@ -2,6 +2,7 @@ package estructuraDeDatos;
 
 import java.util.Comparator;
 
+import mundo.comparadorNombre;
 import estructuraDatos.ListaEncadenadaDoble;
 
 public class TablaHash<E,K extends String> implements ITablaHash<E, K >
@@ -10,10 +11,15 @@ public class TablaHash<E,K extends String> implements ITablaHash<E, K >
 	private  ListaEncadenadaDoble<CeldaTabla<E, K>>[] celdas;
 
 	private int cantidadElementos;
+
+	private int tamano;
+	
+	private Comparator<CeldaTabla<E, K>> comparadorAgregar;
 	
 	public TablaHash()
 	{
-		celdas =  new ListaEncadenadaDoble[5000];
+		tamano = 5000;
+		celdas =  new ListaEncadenadaDoble[tamano];
 
 		for(int i =  0; i< celdas.length;i++)
 		{
@@ -22,13 +28,18 @@ public class TablaHash<E,K extends String> implements ITablaHash<E, K >
 
 	}
 
-	public int agregar(E nElemento, K nLlave, Comparator<CeldaTabla<E, K>> comparador) 
+	public void agregar(E nElemento, K nLlave, Comparator<CeldaTabla<E, K>> comparador) 
 	{
+
+		comparadorAgregar = comparador;
 		int pos = funcion(nLlave);
 		CeldaTabla<E,K> celdaMeter = new CeldaTabla(nElemento, nLlave);
 		celdas[pos].adicionar(celdaMeter, comparador);
 		cantidadElementos++;
-		return pos;
+		if(cantidadElementos/tamano>0.8)
+		{
+			agrandarArreglo();
+		}
 	}
 
 	@Override
@@ -59,8 +70,45 @@ public class TablaHash<E,K extends String> implements ITablaHash<E, K >
 	
 	private int funcion(K pLlave)
 	{
-		int valor = Integer.parseInt(pLlave);
-		return Math.abs(valor-1)%5000;
+		int val = 0 ;
+		char[] letras = pLlave.toCharArray();
+		for(int i = 0 ; i<letras.length;i++)
+		{
+			val+=letras[i]-60;
+		}
+		return Math.abs(val%tamano);
+	}
+	
+	private void agrandarArreglo()
+	{
+		int tamanoant = tamano;
+		tamano  = tamano *2;
+		 ListaEncadenadaDoble<CeldaTabla<E, K>>[] anterior = celdas;
+		 celdas =  new ListaEncadenadaDoble[tamano];
+
+			for(int i =  0; i< celdas.length;i++)
+			{
+				celdas[i] = new ListaEncadenadaDoble<CeldaTabla<E,K>>();
+			}
+			cantidadElementos=0;
+		for(int i = 0 ; i<tamanoant;i++)
+		{
+			ListaEncadenadaDoble<CeldaTabla<E, K>> reshash =  anterior[i];
+			
+			if(reshash.darTamano()>0)
+			{
+				reshash.volverActualPrimero();
+				CeldaTabla<E, K> act = reshash.darActual();
+				agregar(act.darElemento(), act.darLlave(), comparadorAgregar);
+				act = anterior[i].adelantarse();
+				while(act !=null)
+				{
+					agregar(act.darElemento(), act.darLlave(), comparadorAgregar);
+					act = anterior[i].adelantarse();
+				}
+			}
+		}
+		
 	}
 
 }

@@ -24,10 +24,5 @@ public class CeldaTabla<E,K extends String> implements ICeldaTabla<E, K >
 		return llave;
 	}
 
-	@Override
-	public void modificarElemento(E pElemento) 
-	{
-		elementoActual = pElemento;
-	}
 
 }
