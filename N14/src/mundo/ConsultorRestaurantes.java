@@ -77,6 +77,10 @@ public class ConsultorRestaurantes implements IConsultorRestaurantes
 		 new ConsultorRestaurantes().cargarXLS();
 	}
 
+	public Restaurante[] darRestaurantesPrueba()
+	{
+		return restauranteArregloPrueba;
+	}
 	
 	
 
