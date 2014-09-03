@@ -83,6 +83,10 @@ public class Restaurante
 		return ID;
 	}
 	
+	public String toString ()
+	{
+		return ID;
+	}
 	
 	
 }
