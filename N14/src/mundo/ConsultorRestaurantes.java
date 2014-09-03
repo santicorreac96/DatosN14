@@ -81,6 +81,38 @@ public class ConsultorRestaurantes implements IConsultorRestaurantes
 	{
 		return restauranteArregloPrueba;
 	}
+
+	@Override
+	public ListaEncadenadaDoble<Restaurante> buscarPorIdentidicadorCompuesto(
+			String id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ListaEncadenadaDoble<Restaurante> buscarPorLocacion(String estado,
+			String ciudad) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void registrarUsuario(Usuario pUser) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Usuario darUsuarioActual() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void eliminarRestaurante(String id) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	
 
