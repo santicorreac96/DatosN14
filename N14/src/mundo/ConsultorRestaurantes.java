@@ -12,13 +12,13 @@ import jxl.Workbook;
 public class ConsultorRestaurantes implements IConsultorRestaurantes
 {
 	
-	private ITablaHash<Restaurante, String> tabla;
+	private ITablaHash<Restaurante, String> tablaIdentifcadorCompuesto;
 	private Restaurante[] restauranteArregloPrueba;
 	private int indiceActual;
 	
 	public ConsultorRestaurantes()
 	{
-		tabla  = new TablaHash<Restaurante, String>();
+		tablaIdentifcadorCompuesto  = new TablaHash<Restaurante, String>();
 		restauranteArregloPrueba = new Restaurante[5000];
 		indiceActual = 0;
 		
@@ -59,7 +59,7 @@ public class ConsultorRestaurantes implements IConsultorRestaurantes
 				cocina = cocina.replace("[", "");
 				cocina = cocina.replace("]", "");
 				Restaurante r = new Restaurante(nombre, ciudad, estado,direccion,post,telefono,fax,latitud,longitud,barrio,web,email,categoria,horario,cocina);
-				tabla.agregar(r, r.getID(), new comparadorNombre());
+				tablaIdentifcadorCompuesto.agregar(r, r.getID(), new comparadorRestaurantes());
 				restauranteArregloPrueba[indiceActual] = r;
 				indiceActual++;
 			}
@@ -68,7 +68,7 @@ public class ConsultorRestaurantes implements IConsultorRestaurantes
 		}
 		catch ( Exception e)
 		{
-			System.out.println("excepcion en metodo cargar xls" + e.getMessage()+indiceActual);
+			System.out.println("Excepcion en metodo cargar xls: " + e.getMessage()+indiceActual);
 		}
 		
 	}

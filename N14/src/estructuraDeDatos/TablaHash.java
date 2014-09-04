@@ -2,7 +2,6 @@ package estructuraDeDatos;
 
 import java.util.Comparator;
 
-import mundo.comparadorNombre;
 import estructuraDatos.IListaEncadenadaDoble;
 import estructuraDatos.ListaEncadenadaDoble;
 
@@ -109,7 +108,6 @@ public class TablaHash<E,K extends String> implements ITablaHash<E, K >
 				}
 			}
 		}
-		
 	}
 
 }

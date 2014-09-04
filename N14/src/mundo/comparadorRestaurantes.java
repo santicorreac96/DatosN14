@@ -4,7 +4,7 @@ import java.util.Comparator;
 
 import estructuraDeDatos.CeldaTabla;
 
-public class comparadorNombre implements Comparator<CeldaTabla<Restaurante, String>>
+public class comparadorRestaurantes implements Comparator<CeldaTabla<Restaurante, String>>
 
 {
 

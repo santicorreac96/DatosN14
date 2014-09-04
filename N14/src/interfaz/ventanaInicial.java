@@ -188,7 +188,8 @@ public class ventanaInicial extends JFrame {
 		textFieldAdmin.setColumns(10);
 		
 		btnLoginAdmin = new JButton("Login!");
-		btnLoginAdmin.addActionListener(new ActionListener() {
+		btnLoginAdmin.addActionListener(new ActionListener() 
+		{
 			public void actionPerformed(ActionEvent e) 
 			{
 				mostrarInterfazAdministrador();
