@@ -110,4 +110,10 @@ public class TablaHash<E,K extends String> implements ITablaHash<E, K >
 		}
 	}
 
+	public IListaEncadenadaDoble darLista(K pLlave)
+	{
+		int pos = funcion(pLlave);
+		return celdas[pos];
+	}
+
 }

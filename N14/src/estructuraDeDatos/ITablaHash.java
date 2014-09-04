@@ -2,6 +2,8 @@ package estructuraDeDatos;
 
 import java.util.Comparator;
 
+import estructuraDatos.IListaEncadenadaDoble;
+
 public interface ITablaHash <E,K extends String>
 {
 	
@@ -35,6 +37,9 @@ public abstract void agregar(E nElemento, K nLlave,Comparator<CeldaTabla<E, K>> 
 	 * @return La cantidad de elementos en la tabla
 	 */
 	public abstract int darCantidadElementos();
+	
+	
+	public abstract IListaEncadenadaDoble darLista(K pLlave);
 
 
 }

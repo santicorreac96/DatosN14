@@ -13,12 +13,14 @@ public class ConsultorRestaurantes implements IConsultorRestaurantes
 {
 	
 	private ITablaHash<Restaurante, String> tablaIdentifcadorCompuesto;
+	private ITablaHash<Restaurante, String> tablaLocalidadEstado;
 	private Restaurante[] restauranteArregloPrueba;
 	private int indiceActual;
 	
 	public ConsultorRestaurantes()
 	{
 		tablaIdentifcadorCompuesto  = new TablaHash<Restaurante, String>();
+		tablaLocalidadEstado  =new TablaHash<Restaurante, String>();
 		restauranteArregloPrueba = new Restaurante[5000];
 		indiceActual = 0;
 		
@@ -60,6 +62,7 @@ public class ConsultorRestaurantes implements IConsultorRestaurantes
 				cocina = cocina.replace("]", "");
 				Restaurante r = new Restaurante(nombre, ciudad, estado,direccion,post,telefono,fax,latitud,longitud,barrio,web,email,categoria,horario,cocina);
 				tablaIdentifcadorCompuesto.agregar(r, r.getID(), new comparadorRestaurantes());
+				tablaLocalidadEstado.agregar(r, r.getCiudad()+"-"+r.getEstado(), new comparadorRestaurantes());
 				restauranteArregloPrueba[indiceActual] = r;
 				indiceActual++;
 			}
@@ -90,8 +93,8 @@ public class ConsultorRestaurantes implements IConsultorRestaurantes
 	}
 
 	@Override
-	public ListaEncadenadaDoble<Restaurante> buscarPorLocacion(String estado,
-			String ciudad) {
+	public ListaEncadenadaDoble<Restaurante> buscarPorLocacion(String estado,String ciudad) 
+	{
 		// TODO Auto-generated method stub
 		return null;
 	}
