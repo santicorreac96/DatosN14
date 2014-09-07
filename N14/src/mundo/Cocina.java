@@ -32,5 +32,9 @@ public class Cocina
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
+	public void bajarCantidad() 
+	{
+		this.cantidad--;
+	}
 
 }

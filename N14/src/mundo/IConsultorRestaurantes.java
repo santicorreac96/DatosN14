@@ -30,7 +30,7 @@ public interface IConsultorRestaurantes
 	 * @param pUser El usuario a registrar
 	 * @throws Exception Si ya existe un usuario con la informacion dada
 	 */
-	public abstract void registrarUsuario( Usuario pUser)throws Exception;
+	public abstract void registrarUsuario(String pUser, String pPass, String nNombre, String nApellido, String nCedula,String nMail) throws Exception;
 	
 	/**
 	 * Metodo que retorna el usuario que esta usando el directorio
@@ -42,6 +42,6 @@ public interface IConsultorRestaurantes
 	 * Metodo que permite borra un restaurante dado su identificador
 	 * @param id el identificador del restaurante a borrar
 	 */
-	public abstract void eliminarRestaurante(String id);
+	public abstract void eliminarRestaurante(String id)throws Exception;
 
 }

@@ -50,22 +50,6 @@ public class Usuario extends Persona
 		password = nPass;
 	}
 
-	public void asignarCriterioComparacion(int criterio)
-	{
-		criterioComparacion =criterio;
-	}
-
-	public int compararPor(Usuario objeto)
-	{
-		if(criterioComparacion == USER)
-		{
-			return user.compareTo(objeto.user);
-		}
-		else 
-		{
-			return cedula.compareTo(objeto.cedula);
-		}
-	}
 	
 	public void agregarFavorito(Restaurante favorito)
 	{

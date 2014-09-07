@@ -16,10 +16,12 @@ public class ConsultorRestaurantes implements IConsultorRestaurantes
 	private ITablaHash<Restaurante, String> tablaIdentifcadorCompuesto;
 	private ITablaHash<Restaurante, String> tablaLocalidadEstado;
 	private Restaurante[] restauranteArregloPrueba;
+	private IListaEncadenadaDoble<Usuario> registrados;
 	private int indiceActual;
 	private int indiceCatCoc;
 	private Categoria[] categoriasRestaurante; 
-	private Cocina[] cocinasRestaurante; 
+	private Cocina[] cocinasRestaurante;
+	private Usuario usuarioRegistradoActual; 
 	
 	public ConsultorRestaurantes()
 	{
@@ -131,20 +133,92 @@ public class ConsultorRestaurantes implements IConsultorRestaurantes
 	}
 
 	@Override
-	public void registrarUsuario(Usuario pUser) throws Exception {
+	public void registrarUsuario(String pUser, String pPass, String nNombre, String nApellido, String nCedula,String nMail) throws Exception 
+	{
 		// TODO Auto-generated method stub
+		Usuario nuevo = new Usuario(pUser,pPass,nNombre,nApellido,nCedula,nMail,this);
+		Usuario nuevo1 = new Usuario(pUser,pPass,nNombre,nApellido,nCedula,nMail,this);
+		if(registrados.buscarElemento(nuevo, new comparadorNombreUs()) != null || registrados.buscarElemento(nuevo1,new comparadorCedula()) != null)
+		{
+			throw new Exception("Ya existe una persona registrada con esos datos");
+		}
+		else
+		{
+			registrados.adicionar(nuevo,new comparadorNombreUs());
+		}
+		
+	}
+	
+	public boolean verificarUsuario(String pPass, String pUser) 
+	{
+		Usuario buscado = new Usuario(pUser, pPass, "", "", "", "",this);
+		Usuario encontrado = registrados.buscarElemento(buscado, new comparadorNombreUs());
+		if(encontrado!=null)
+		{
+			if(encontrado.darPassword().equals(pPass))
+			{
+				usuarioRegistradoActual = encontrado;
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
 		
 	}
 
 	@Override
 	public Usuario darUsuarioActual() {
 		// TODO Auto-generated method stub
-		return null;
+		return usuarioRegistradoActual;
 	}
 
-	@Override
-	public void eliminarRestaurante(String id) {
-		// TODO Auto-generated method stub
+	public void eliminarRestaurante(String id) throws Exception 
+	{
+		IListaEncadenadaDoble<Restaurante> r =  buscarPorIdentidicadorCompuesto(id);
+		Restaurante ini = r.volverActualPrimero();
+		while(ini!=null)
+		{
+			tablaIdentifcadorCompuesto.eliminar(ini.getID(), new comparadorRestaurantes());
+			String[] c = ini.getID().split("-");
+			tablaLocalidadEstado.eliminar(c[1]+"-"+c[2], new comparadorRestaurantes());
+			String[] tipsCocina = ini.getCocina().split(",");
+			String[] tipsCategoria = ini.getCategoria().split(",");
+			for(int i =  0; i <tipsCocina.length;i++)
+			{
+				String coc = tipsCocina[i];
+				boolean borro = false;
+				for(int j = 0 ; j<cocinasRestaurante.length &&!borro;j++)
+				{
+					Cocina act = cocinasRestaurante[j];
+					if(act.getNombre().equals(coc)&& act.getEstado().equals(ini.getEstado()))
+					{
+						act.bajarCantidad();
+						borro = true;
+					}
+				}
+			}
+			for(int i =  0; i <tipsCategoria.length;i++)
+			{
+				String coc = tipsCategoria[i];
+				boolean borro = false;
+				for(int j = 0 ; j<categoriasRestaurante.length &&!borro;j++)
+				{
+					Categoria act = categoriasRestaurante[j];
+					if(act.getNombre().equals(coc))
+					{
+						act.bajarCantidad();
+						borro = true;
+					}
+				}
+			}
+			ini = r.adelantarse();
+		}
 		
 	}
 	
