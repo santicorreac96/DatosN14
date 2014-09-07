@@ -39,7 +39,7 @@ public abstract void agregar(E nElemento, K nLlave,Comparator<CeldaTabla<E, K>> 
 	public abstract int darCantidadElementos();
 	
 	
-	public abstract IListaEncadenadaDoble darLista(K pLlave);
+	public abstract IListaEncadenadaDoble darLista(K pLlave, Comparator<E> comparador);
 
 
 }

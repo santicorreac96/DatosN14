@@ -1,6 +1,6 @@
 package mundo;
 
-import estructuraDatos.ListaEncadenadaDoble;
+import estructuraDatos.IListaEncadenadaDoble;
 
 public interface IConsultorRestaurantes
 {
@@ -15,7 +15,7 @@ public interface IConsultorRestaurantes
 	 * @param id el identificador de busqueda
 	 * @return Una lista con los restaurantes que tiene el identificador dado
 	 */
-	public abstract ListaEncadenadaDoble<Restaurante> buscarPorIdentidicadorCompuesto(String id);
+	public abstract IListaEncadenadaDoble<Restaurante> buscarPorIdentidicadorCompuesto(String id);
 	
 	/**
 	 * Metodo que permite buscar restaurantes por region y/o ciudad
@@ -23,7 +23,7 @@ public interface IConsultorRestaurantes
 	 * @param ciudad la ciudad que se busca tenga el restaurante
 	 * @return Una lista con los restaurantes en la ciudad y/o estado dados
 	 */
-	public abstract ListaEncadenadaDoble<Restaurante> buscarPorLocacion(String estado, String ciudad);
+	public abstract IListaEncadenadaDoble<Restaurante> buscarPorLocacion(String estado, String ciudad);
 	
 	/**
 	 * Metodo que permite regustrar un usuario

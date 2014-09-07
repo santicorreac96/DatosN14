@@ -2,6 +2,7 @@ package estructuraDeDatos;
 
 import java.util.Comparator;
 
+import mundo.comparadorID;
 import estructuraDatos.IListaEncadenadaDoble;
 import estructuraDatos.ListaEncadenadaDoble;
 
@@ -110,10 +111,32 @@ public class TablaHash<E,K extends String> implements ITablaHash<E, K >
 		}
 	}
 
-	public IListaEncadenadaDoble darLista(K pLlave)
+	public IListaEncadenadaDoble darLista(K pLlave, Comparator<E> comparador)
 	{
+		IListaEncadenadaDoble<E> resp = new ListaEncadenadaDoble<E>();
 		int pos = funcion(pLlave);
-		return celdas[pos];
+		IListaEncadenadaDoble ce  =celdas[pos];
+		E ini = null;
+		CeldaTabla<E, K> act = celdas[pos].volverActualPrimero();
+		if(act!=null)
+		{
+			ini = act.darElemento();
+		}
+		while(ini!=null)
+		{
+			resp.adicionar(ini, comparador);
+			act = celdas[pos].adelantarse();
+			if(act!=null)
+			{
+				ini = act.darElemento();
+			}
+			else
+			{
+				ini = null;
+			}
+		}
+		return resp;
+		
 	}
 
 }

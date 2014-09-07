@@ -2,6 +2,7 @@ package mundo;
 
 import java.io.File;
 
+import estructuraDatos.IListaEncadenadaDoble;
 import estructuraDatos.ListaEncadenadaDoble;
 import estructuraDeDatos.ITablaHash;
 import estructuraDeDatos.TablaHash;
@@ -16,6 +17,9 @@ public class ConsultorRestaurantes implements IConsultorRestaurantes
 	private ITablaHash<Restaurante, String> tablaLocalidadEstado;
 	private Restaurante[] restauranteArregloPrueba;
 	private int indiceActual;
+	private int indiceCatCoc;
+	private Categoria[] categoriasRestaurante; 
+	private Cocina[] cocinasRestaurante; 
 	
 	public ConsultorRestaurantes()
 	{
@@ -23,7 +27,8 @@ public class ConsultorRestaurantes implements IConsultorRestaurantes
 		tablaLocalidadEstado  =new TablaHash<Restaurante, String>();
 		restauranteArregloPrueba = new Restaurante[5000];
 		indiceActual = 0;
-		
+		cocinasRestaurante = new Cocina[2310];
+		categoriasRestaurante = new Categoria[38];
 	}
 
 	@Override
@@ -55,19 +60,22 @@ public class ConsultorRestaurantes implements IConsultorRestaurantes
 				categoria = categoria.replace("\"", "");
 				categoria = categoria.replace("[", "");
 				categoria = categoria.replace("]", "");
-				String horario = hoja.getCell(21, j).getContents();
-				String cocina = hoja.getCell(23, j).getContents();
+				String[] tags = categoria.split(",");
+				String horario = hoja.getCell(23, j).getContents();
+				String cocina = hoja.getCell(25, j).getContents();
 				cocina = cocina.replace("\"", "");
 				cocina = cocina.replace("[", "");
 				cocina = cocina.replace("]", "");
+				String[] tags2 = cocina.split(",");
 				Restaurante r = new Restaurante(nombre, ciudad, estado,direccion,post,telefono,fax,latitud,longitud,barrio,web,email,categoria,horario,cocina);
 				tablaIdentifcadorCompuesto.agregar(r, r.getID(), new comparadorRestaurantes());
 				tablaLocalidadEstado.agregar(r, r.getCiudad()+"-"+r.getEstado(), new comparadorRestaurantes());
+				darCategoriasPopulares(tags);
+				darCocinasPopulares(tags2,r.getEstado());
 				restauranteArregloPrueba[indiceActual] = r;
 				indiceActual++;
 			}
 			System.out.println("Leyo ultimo");
-
 		}
 		catch ( Exception e)
 		{
@@ -76,8 +84,8 @@ public class ConsultorRestaurantes implements IConsultorRestaurantes
 		
 	}
 	
-	public static void main(String[] args) {
-		 new ConsultorRestaurantes().cargarXLS();
+	public static void main(String[] args) {		ConsultorRestaurantes r =  new ConsultorRestaurantes();
+		r.cargarXLS();		
 	}
 
 	public Restaurante[] darRestaurantesPrueba()
@@ -86,17 +94,40 @@ public class ConsultorRestaurantes implements IConsultorRestaurantes
 	}
 
 	@Override
-	public ListaEncadenadaDoble<Restaurante> buscarPorIdentidicadorCompuesto(
+	public IListaEncadenadaDoble<Restaurante> buscarPorIdentidicadorCompuesto(
 			String id) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		IListaEncadenadaDoble<Restaurante> lista = tablaIdentifcadorCompuesto.darLista(id, new comparadorID());
+		IListaEncadenadaDoble<Restaurante> resp = new ListaEncadenadaDoble<Restaurante>();
+		Restaurante ini  = lista.volverActualPrimero();
+		while(ini!=null)
+		{
+			if(ini.getID().contains(id))
+			{
+				System.out.println(ini.getID());
+				resp.adicionar(ini, new comparadorID());
+			}
+			ini = lista.adelantarse();
+		}
+		return  resp;
 	}
 
 	@Override
-	public ListaEncadenadaDoble<Restaurante> buscarPorLocacion(String estado,String ciudad) 
+	public IListaEncadenadaDoble<Restaurante> buscarPorLocacion(String estado,String ciudad) 
 	{
-		// TODO Auto-generated method stub
-		return null;
+		IListaEncadenadaDoble<Restaurante> lista = tablaLocalidadEstado.darLista(ciudad+"-"+estado,new ComparadorLocalidad());
+		IListaEncadenadaDoble<Restaurante> resp = new ListaEncadenadaDoble<Restaurante>();
+		Restaurante ini  = lista.volverActualPrimero();
+		while(ini!=null)
+		{
+			if(ini.getID().contains(ciudad)&& ini.getID().contains(estado))
+			{
+				System.out.println(ini.getID());
+				resp.adicionar(ini, new comparadorID());
+			}
+			ini = lista.adelantarse();
+		}
+		return  resp;
 	}
 
 	@Override
@@ -117,6 +148,89 @@ public class ConsultorRestaurantes implements IConsultorRestaurantes
 		
 	}
 	
+	public void darCategoriasPopulares(String[] categoriaT)
+	{
+		int indez = 0;
+		String revisadas = "";
+		while(indez<categoriaT.length)
+		{
+			
+			boolean teermino = false;
+			String categoria = categoriaT[indez];
+			
+			if(revisadas.contains(categoria)==false)
+			{
+				for(int i = 0 ; i<categoriasRestaurante.length && !teermino;i++)
+				{
+					Categoria actual = categoriasRestaurante[i];
+					if(actual!=null)
+					{
+						if(actual.getNombre().equals(categoria))
+						{
+							actual.setCantidad();
+							teermino = true;
+						}
+					}
+					else
+					{
+						categoriasRestaurante[i] =  new Categoria(1, categoria);
+						teermino = true;
+					}
+				}
+
+			}
+			indez++;		
+			revisadas+=categoria+"-";
+		}
+	}
+
+		public void darCocinasPopulares(String[] cocinaT, String estado)
+		{
+			int indez = 0;
+			String revisadas = "";
+			while(indez<cocinaT.length)
+			{
+				
+				boolean teermino = false;
+				String categoria = cocinaT[indez];
+				
+				if(revisadas.contains(categoria)==false)
+				{
+					for(int i = 0 ; i<cocinasRestaurante.length && !teermino;i++)
+					{
+						Cocina actual = cocinasRestaurante[i];
+						if(actual!=null)
+						{
+							if(actual.getNombre().equals(categoria) && actual.getEstado().equals(estado) )
+							{
+								actual.setCantidad();
+								teermino = true;
+							}
+						}
+						else
+						{
+							cocinasRestaurante[i] =  new Cocina(1, categoria,estado);
+							teermino = true;
+						}
+					}
+
+				}
+				indez++;		
+				revisadas+=categoria+"-";
+			}	
+
+		}
 	
+		public Categoria[] darCategorias()
+		{
+			return categoriasRestaurante;
+		}
+		
+		public Cocina[] darCocinas()
+		{
+			return cocinasRestaurante;
+		}
+		
+		
 
 }
