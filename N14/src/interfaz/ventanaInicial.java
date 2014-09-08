@@ -138,6 +138,12 @@ public class ventanaInicial extends JFrame {
 		textFieldPassword.setColumns(10);
 		
 		btnLogin = new JButton("Login!");
+		btnLogin.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) 
+			{
+				mostrarInterfazUsuario();
+			}
+		});
 		btnLogin.setAlignmentX(Component.CENTER_ALIGNMENT);
 		GridBagConstraints gbc_btnLogin = new GridBagConstraints();
 		gbc_btnLogin.anchor = GridBagConstraints.WEST;
@@ -208,6 +214,20 @@ public class ventanaInicial extends JFrame {
 			ventanaAdmin admin = new ventanaAdmin();
 			admin.setPrincipal(this);
 			admin.setVisible(true);
+		}
+		else
+		{
+			JOptionPane.showMessageDialog(this, "Contraseña incorrecta", "Informacion", JOptionPane.INFORMATION_MESSAGE);
+		}
+	}
+	
+	public void mostrarInterfazUsuario()
+	{
+		if (textFieldUsername.getText().equals("usuario") && textFieldPassword.getText().equals("usuario"))
+		{
+			ventanaUsuario usuario = new ventanaUsuario();
+			usuario.setPrincipal(this);
+			usuario.setVisible(true);
 		}
 		else
 		{
