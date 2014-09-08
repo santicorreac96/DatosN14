@@ -23,11 +23,6 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 
 
-
-
-
-
-
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Component;
@@ -38,7 +33,7 @@ import java.awt.Point;
 
 import javax.swing.JPasswordField;
 
-import mundo.Aplicacion;
+import mundo.ConsultorRestaurantes;
 import mundo.Restaurante;
 
 
@@ -56,7 +51,7 @@ public class ventanaInicial extends JFrame {
 	private JLabel lblPassword_1;
 	private JButton btnLoginAdmin;
 	private JPasswordField textFieldAdmin;
-	private Aplicacion aplicacion;
+	private ConsultorRestaurantes aplicacion;
 
 
 	/**
@@ -79,7 +74,7 @@ public class ventanaInicial extends JFrame {
 	 * Create the frame.
 	 */
 	public ventanaInicial() {
-		aplicacion = new Aplicacion();
+		aplicacion = new ConsultorRestaurantes();
 		setTitle("RestauApp");
 		setResizable(false);
 		setSize(new Dimension(300, 300));
@@ -211,7 +206,7 @@ public class ventanaInicial extends JFrame {
 	{
 		if (textFieldAdmin.getText().equals(aplicacion.CONTRASENA_ADMIN))
 		{
-			ventanaAdmin admin = new ventanaAdmin();
+			ventanaAdmin admin = new ventanaAdmin(aplicacion);
 			admin.setPrincipal(this);
 			admin.setVisible(true);
 		}
@@ -225,7 +220,7 @@ public class ventanaInicial extends JFrame {
 	{
 		if (textFieldUsername.getText().equals("usuario") && textFieldPassword.getText().equals("usuario"))
 		{
-			ventanaUsuario usuario = new ventanaUsuario();
+			ventanaUsuario usuario = new ventanaUsuario(aplicacion);
 			usuario.setPrincipal(this);
 			usuario.setVisible(true);
 		}
@@ -235,9 +230,5 @@ public class ventanaInicial extends JFrame {
 		}
 	}
 	
-	public Restaurante[] cargarXLS()
-	{
-		 return (aplicacion.cargarDatos());	
-	}
 
 }

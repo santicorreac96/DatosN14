@@ -34,8 +34,10 @@ public class Restaurante
 	private String horario;
 	
 	private String cocina;
+	
+	private int pos;
 
-	public Restaurante(String nombre, String ciudad, String estado, String direccion, String post, String telefono, String fax, String latitud, String longitud, String barrio, String web, String email, String categoria, String horario, String cocina) {
+	public Restaurante(String nombre, String ciudad, String estado, String direccion, String post, String telefono, String fax, String latitud, String longitud, String barrio, String web, String email, String categoria, String horario, String cocina,int pos) {
 		super();
 		this.nombre = nombre;
 		this.ciudad = ciudad;
@@ -52,7 +54,16 @@ public class Restaurante
 		this.categoria = categoria;
 		this.horario = horario;
 		this.cocina = cocina;
+		this.pos = pos;
 		ID = this.nombre+"-"+this.ciudad+"-"+this.estado;
+	}
+
+	public int getPos() {
+		return pos;
+	}
+
+	public void setPos(int pos) {
+		this.pos = pos;
 	}
 
 	public String getNombre() {

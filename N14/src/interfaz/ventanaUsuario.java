@@ -5,6 +5,7 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.border.EmptyBorder;
 
@@ -34,15 +35,19 @@ import javax.swing.JDesktopPane;
 import java.awt.Label;
 import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
-import java.awt.Color;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
-public class ventanaUsuario extends JFrame {
+import mundo.ConsultorRestaurantes;
+
+import java.awt.Color;
+import javax.swing.JList;
+import javax.swing.JRadioButton;
+
+public class ventanaUsuario extends JFrame implements ListSelectionListener
+{
 
 	private JPanel panelPrincipal;
-	private JTextField textFieldCriterio1;
-	private JTextField textFieldCriterio2;
-	private JTextField textFieldCriterio3;
-	private JButton btnBuscar;
 	private JPanel panelListas;
 	private JScrollPane scrollPaneListaFavoritos;
 	private JScrollPane scrollPaneListaBusquedas;
@@ -76,28 +81,30 @@ public class ventanaUsuario extends JFrame {
 	private Label labHorario;
 	private Label labCHorario;
 	private ventanaInicial principal;
+	private ConsultorRestaurantes consultorAct;
+	private JList listaFavoritos;
+	private JList listaBusqueda;
+	private JRadioButton radioButton;
+	private JRadioButton radioButton_1;
+	private JLabel LabelFiltro;
+	private JTextField textField;
+	private JLabel lblNombre;
+	private JLabel lblCiudad;
+	private JTextField textField_1;
+	private JLabel lblEstado;
+	private JTextField textField_2;
+	private JLabel lblTipoCocina;
+	private JTextField textField_3;
+	private JButton botonBusqueda;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					ventanaUsuario frame = new ventanaUsuario();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+
 
 	/**
 	 * Create the frame.
 	 */
-	public ventanaUsuario() {
-		setSize(new Dimension(1000, 700));
+	public ventanaUsuario(ConsultorRestaurantes cons) {
+		consultorAct=cons;
+		setSize(new Dimension(1000, 750));
 		setResizable(false);
 		setTitle("RESTAU-Usuario");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -112,67 +119,103 @@ public class ventanaUsuario extends JFrame {
 		panelPrincipal.add(panelBusquedas, BorderLayout.SOUTH);
 		GridBagLayout gbl_panelBusquedas = new GridBagLayout();
 		gbl_panelBusquedas.columnWidths = new int[]{249, 264, 178, 193, 0};
-		gbl_panelBusquedas.rowHeights = new int[]{0, 53, 0};
+		gbl_panelBusquedas.rowHeights = new int[]{0, 0, 0, 27, 0};
 		gbl_panelBusquedas.columnWeights = new double[]{0.0, 1.0, 1.0, 0.0, Double.MIN_VALUE};
-		gbl_panelBusquedas.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
+		gbl_panelBusquedas.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		panelBusquedas.setLayout(gbl_panelBusquedas);
 		
-		JComboBox comboBoxCriterio1 = new JComboBox();
-		GridBagConstraints gbc_comboBoxCriterio1 = new GridBagConstraints();
-		gbc_comboBoxCriterio1.anchor = GridBagConstraints.NORTH;
-		gbc_comboBoxCriterio1.insets = new Insets(0, 0, 5, 5);
-		gbc_comboBoxCriterio1.gridx = 0;
-		gbc_comboBoxCriterio1.gridy = 0;
-		panelBusquedas.add(comboBoxCriterio1, gbc_comboBoxCriterio1);
+		LabelFiltro = new JLabel("Lista a filtrar");
+		GridBagConstraints gbc_LabelFiltro = new GridBagConstraints();
+		gbc_LabelFiltro.insets = new Insets(0, 0, 5, 5);
+		gbc_LabelFiltro.gridx = 0;
+		gbc_LabelFiltro.gridy = 0;
+		panelBusquedas.add(LabelFiltro, gbc_LabelFiltro);
 		
-		JComboBox comboBoxCriterio2 = new JComboBox();
-		GridBagConstraints gbc_comboBoxCriterio2 = new GridBagConstraints();
-		gbc_comboBoxCriterio2.insets = new Insets(0, 0, 5, 5);
-		gbc_comboBoxCriterio2.anchor = GridBagConstraints.NORTH;
-		gbc_comboBoxCriterio2.gridx = 1;
-		gbc_comboBoxCriterio2.gridy = 0;
-		panelBusquedas.add(comboBoxCriterio2, gbc_comboBoxCriterio2);
+		lblNombre = new JLabel("Nombre");
+		GridBagConstraints gbc_lblNombre = new GridBagConstraints();
+		gbc_lblNombre.insets = new Insets(0, 0, 5, 5);
+		gbc_lblNombre.gridx = 1;
+		gbc_lblNombre.gridy = 0;
+		panelBusquedas.add(lblNombre, gbc_lblNombre);
 		
-		JComboBox comboBoxCriterio3 = new JComboBox();
-		GridBagConstraints gbc_comboBoxCriterio3 = new GridBagConstraints();
-		gbc_comboBoxCriterio3.insets = new Insets(0, 0, 5, 5);
-		gbc_comboBoxCriterio3.anchor = GridBagConstraints.NORTH;
-		gbc_comboBoxCriterio3.gridx = 2;
-		gbc_comboBoxCriterio3.gridy = 0;
-		panelBusquedas.add(comboBoxCriterio3, gbc_comboBoxCriterio3);
+		lblEstado = new JLabel("Estado");
+		GridBagConstraints gbc_lblEstado = new GridBagConstraints();
+		gbc_lblEstado.insets = new Insets(0, 0, 5, 5);
+		gbc_lblEstado.gridx = 2;
+		gbc_lblEstado.gridy = 0;
+		panelBusquedas.add(lblEstado, gbc_lblEstado);
 		
-		textFieldCriterio1 = new JTextField();
-		textFieldCriterio1.setMinimumSize(new Dimension(100, 20));
-		GridBagConstraints gbc_textFieldCriterio1 = new GridBagConstraints();
-		gbc_textFieldCriterio1.insets = new Insets(0, 0, 0, 5);
-		gbc_textFieldCriterio1.gridx = 0;
-		gbc_textFieldCriterio1.gridy = 1;
-		panelBusquedas.add(textFieldCriterio1, gbc_textFieldCriterio1);
-		textFieldCriterio1.setColumns(10);
+		radioButton = new JRadioButton("New radio button");
+		GridBagConstraints gbc_radioButton = new GridBagConstraints();
+		gbc_radioButton.insets = new Insets(0, 0, 5, 5);
+		gbc_radioButton.gridx = 0;
+		gbc_radioButton.gridy = 1;
+		panelBusquedas.add(radioButton, gbc_radioButton);
 		
-		textFieldCriterio2 = new JTextField();
-		textFieldCriterio2.setMinimumSize(new Dimension(100, 20));
-		GridBagConstraints gbc_textFieldCriterio2 = new GridBagConstraints();
-		gbc_textFieldCriterio2.insets = new Insets(0, 0, 0, 5);
-		gbc_textFieldCriterio2.gridx = 1;
-		gbc_textFieldCriterio2.gridy = 1;
-		panelBusquedas.add(textFieldCriterio2, gbc_textFieldCriterio2);
-		textFieldCriterio2.setColumns(10);
+		textField = new JTextField();
+		GridBagConstraints gbc_textField = new GridBagConstraints();
+		gbc_textField.insets = new Insets(0, 0, 5, 5);
+		gbc_textField.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textField.gridx = 1;
+		gbc_textField.gridy = 1;
+		panelBusquedas.add(textField, gbc_textField);
+		textField.setColumns(10);
 		
-		textFieldCriterio3 = new JTextField();
-		textFieldCriterio3.setMinimumSize(new Dimension(100, 20));
-		GridBagConstraints gbc_textFieldCriterio3 = new GridBagConstraints();
-		gbc_textFieldCriterio3.insets = new Insets(0, 0, 0, 5);
-		gbc_textFieldCriterio3.gridx = 2;
-		gbc_textFieldCriterio3.gridy = 1;
-		panelBusquedas.add(textFieldCriterio3, gbc_textFieldCriterio3);
-		textFieldCriterio3.setColumns(10);
+		textField_2 = new JTextField();
+		GridBagConstraints gbc_textField_2 = new GridBagConstraints();
+		gbc_textField_2.insets = new Insets(0, 0, 5, 5);
+		gbc_textField_2.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textField_2.gridx = 2;
+		gbc_textField_2.gridy = 1;
+		panelBusquedas.add(textField_2, gbc_textField_2);
+		textField_2.setColumns(10);
 		
-		btnBuscar = new JButton("Buscar!");
-		GridBagConstraints gbc_btnBuscar = new GridBagConstraints();
-		gbc_btnBuscar.gridx = 3;
-		gbc_btnBuscar.gridy = 1;
-		panelBusquedas.add(btnBuscar, gbc_btnBuscar);
+		lblCiudad = new JLabel("Ciudad");
+		GridBagConstraints gbc_lblCiudad = new GridBagConstraints();
+		gbc_lblCiudad.insets = new Insets(0, 0, 5, 5);
+		gbc_lblCiudad.gridx = 1;
+		gbc_lblCiudad.gridy = 2;
+		panelBusquedas.add(lblCiudad, gbc_lblCiudad);
+		
+		lblTipoCocina = new JLabel("Tipo Cocina");
+		GridBagConstraints gbc_lblTipoCocina = new GridBagConstraints();
+		gbc_lblTipoCocina.insets = new Insets(0, 0, 5, 5);
+		gbc_lblTipoCocina.gridx = 2;
+		gbc_lblTipoCocina.gridy = 2;
+		panelBusquedas.add(lblTipoCocina, gbc_lblTipoCocina);
+		
+		botonBusqueda = new JButton("Filtrar");
+		GridBagConstraints gbc_botonBusqueda = new GridBagConstraints();
+		gbc_botonBusqueda.gridheight = 3;
+		gbc_botonBusqueda.insets = new Insets(0, 0, 5, 0);
+		gbc_botonBusqueda.gridx = 3;
+		gbc_botonBusqueda.gridy = 1;
+		panelBusquedas.add(botonBusqueda, gbc_botonBusqueda);
+		
+		radioButton_1 = new JRadioButton("New radio button");
+		GridBagConstraints gbc_radioButton_1 = new GridBagConstraints();
+		gbc_radioButton_1.insets = new Insets(0, 0, 0, 5);
+		gbc_radioButton_1.gridx = 0;
+		gbc_radioButton_1.gridy = 3;
+		panelBusquedas.add(radioButton_1, gbc_radioButton_1);
+		
+		textField_1 = new JTextField();
+		GridBagConstraints gbc_textField_1 = new GridBagConstraints();
+		gbc_textField_1.insets = new Insets(0, 0, 0, 5);
+		gbc_textField_1.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textField_1.gridx = 1;
+		gbc_textField_1.gridy = 3;
+		panelBusquedas.add(textField_1, gbc_textField_1);
+		textField_1.setColumns(10);
+		
+		textField_3 = new JTextField();
+		GridBagConstraints gbc_textField_3 = new GridBagConstraints();
+		gbc_textField_3.insets = new Insets(0, 0, 0, 5);
+		gbc_textField_3.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textField_3.gridx = 2;
+		gbc_textField_3.gridy = 3;
+		panelBusquedas.add(textField_3, gbc_textField_3);
+		textField_3.setColumns(10);
 		
 		panelListas = new JPanel();
 		panelListas.setBorder(new TitledBorder(null, "Listas ", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -205,6 +248,9 @@ public class ventanaUsuario extends JFrame {
 		gbc_scrollPaneListaFavoritos.gridy = 1;
 		panelListas.add(scrollPaneListaFavoritos, gbc_scrollPaneListaFavoritos);
 		
+		listaFavoritos = new JList();
+		scrollPaneListaFavoritos.setViewportView(listaFavoritos);
+		
 		lblListaBusquedas = new JLabel("Lista Busquedas");
 		GridBagConstraints gbc_lblListaBusquedas = new GridBagConstraints();
 		gbc_lblListaBusquedas.insets = new Insets(0, 0, 5, 0);
@@ -220,6 +266,9 @@ public class ventanaUsuario extends JFrame {
 		gbc_scrollPaneListaBusquedas.gridx = 0;
 		gbc_scrollPaneListaBusquedas.gridy = 3;
 		panelListas.add(scrollPaneListaBusquedas, gbc_scrollPaneListaBusquedas);		
+		
+		listaBusqueda = new JList();
+		scrollPaneListaBusquedas.setViewportView(listaBusqueda);
 		
 		panelCentralGeneral = new JPanel();
 		panelPrincipal.add(panelCentralGeneral, BorderLayout.CENTER);
@@ -441,6 +490,12 @@ public class ventanaUsuario extends JFrame {
 	{
 		principal = pPrincipal;
 		principal.setVisible(false);	
+	}
+
+	@Override
+	public void valueChanged(ListSelectionEvent arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

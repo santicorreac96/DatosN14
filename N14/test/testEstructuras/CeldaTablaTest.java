@@ -14,7 +14,7 @@ public class CeldaTablaTest extends TestCase
 		test = new CeldaTabla<Restaurante, String>(null, null);
 		assertNull(test.darElemento());
 		assertNull(test.darLlave());
-		Restaurante r = new Restaurante("", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
+		Restaurante r = new Restaurante("", "", "", "", "", "", "", "", "", "", "", "", "", "", "",0);
 		test  = new CeldaTabla<Restaurante, String>(r, r.getID());
 		assertEquals(r, test.darElemento());
 	}
@@ -24,7 +24,7 @@ public class CeldaTablaTest extends TestCase
 		test = new CeldaTabla<Restaurante, String>(null, null);
 		assertNull(test.darElemento());
 		assertNull(test.darLlave());
-		Restaurante r = new Restaurante("r", "a", "b", "", "", "", "", "", "", "", "", "", "", "", "");
+		Restaurante r = new Restaurante("r", "a", "b", "", "", "", "", "", "", "", "", "", "", "", "",0);
 		test  = new CeldaTabla<Restaurante, String>(r, r.getID());
 		assertEquals(r.getID(), test.darLlave());
 	}

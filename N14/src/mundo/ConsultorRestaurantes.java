@@ -13,12 +13,12 @@ import jxl.Workbook;
 public class ConsultorRestaurantes implements IConsultorRestaurantes
 {
 	
+	public static final Object CONTRASENA_ADMIN = "RESTAU-ADMIN";
 	private ITablaHash<Restaurante, String> tablaIdentifcadorCompuesto;
 	private ITablaHash<Restaurante, String> tablaLocalidadEstado;
 	private Restaurante[] restauranteArregloPrueba;
 	private IListaEncadenadaDoble<Usuario> registrados;
 	private int indiceActual;
-	private int indiceCatCoc;
 	private Categoria[] categoriasRestaurante; 
 	private Cocina[] cocinasRestaurante;
 	private Usuario usuarioRegistradoActual; 
@@ -69,7 +69,7 @@ public class ConsultorRestaurantes implements IConsultorRestaurantes
 				cocina = cocina.replace("[", "");
 				cocina = cocina.replace("]", "");
 				String[] tags2 = cocina.split(",");
-				Restaurante r = new Restaurante(nombre, ciudad, estado,direccion,post,telefono,fax,latitud,longitud,barrio,web,email,categoria,horario,cocina);
+				Restaurante r = new Restaurante(nombre, ciudad, estado,direccion,post,telefono,fax,latitud,longitud,barrio,web,email,categoria,horario,cocina,indiceActual);
 				tablaIdentifcadorCompuesto.agregar(r, r.getID(), new comparadorRestaurantes());
 				tablaLocalidadEstado.agregar(r, r.getCiudad()+"-"+r.getEstado(), new comparadorRestaurantes());
 				darCategoriasPopulares(tags);
@@ -184,6 +184,7 @@ public class ConsultorRestaurantes implements IConsultorRestaurantes
 		Restaurante ini = r.volverActualPrimero();
 		while(ini!=null)
 		{
+			restauranteArregloPrueba[ini.getPos()] = null;
 			tablaIdentifcadorCompuesto.eliminar(ini.getID(), new comparadorRestaurantes());
 			String[] c = ini.getID().split("-");
 			tablaLocalidadEstado.eliminar(c[1]+"-"+c[2], new comparadorRestaurantes());

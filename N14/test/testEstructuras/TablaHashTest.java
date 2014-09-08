@@ -16,8 +16,8 @@ public class TablaHashTest extends TestCase
 	private void setupEscenario1()
 	{
 		tablaPrueba = new TablaHash<Restaurante, String>();
-		r1 =  new Restaurante("r1", "bog", "co", "", "", "", "", "", "", "", "", "", "", "", "");
-		r2 = new Restaurante("r2", "med", "col", "", "", "", "", "", "", "", "", "", "", "", "");
+		r1 =  new Restaurante("r1", "bog", "co", "", "", "", "", "", "", "", "", "", "", "", "",0);
+		r2 = new Restaurante("r2", "med", "col", "", "", "", "", "", "", "", "", "", "", "", "",0);
 	}
 	
 	public void testAgregar()

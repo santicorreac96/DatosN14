@@ -7,6 +7,7 @@ import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JButton;
@@ -25,28 +26,37 @@ import javax.swing.border.LineBorder;
 import java.awt.Color;
 
 import javax.swing.border.TitledBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.UIManager;
 import javax.swing.JScrollPane;
 
+import mundo.ConsultorRestaurantes;
 import mundo.Restaurante;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 
-public class ventanaAdmin extends JFrame {
+public class ventanaAdmin extends JFrame implements ListSelectionListener
+{
 
 	private JPanel panelPrincipal;
 	
 	private ventanaInicial principal;
 
 	private JList listaRestaurantes;
+	
+	private ConsultorRestaurantes mundoActual;
 
 
 	/**
 	 * Create the frame.
+	 * @param aplicacion 
 	 */
-	public ventanaAdmin() {
+	public ventanaAdmin(ConsultorRestaurantes aplicacion) 
+	{
+		mundoActual = aplicacion;
 		setSize(new Dimension(500, 500));
 		setResizable(false);
 		setTitle("RESTAU-Administrador");
@@ -69,7 +79,8 @@ public class ventanaAdmin extends JFrame {
 		JButton btnCargarDatos = new JButton("Cargar datos");
 		btnCargarDatos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				refrescarLista(principal.cargarXLS());
+				mundoActual.cargarXLS();
+				refrescarLista(mundoActual.darRestaurantesPrueba());
 			}
 		});
 		GridBagConstraints gbc_btnCargarDatos = new GridBagConstraints();
@@ -79,6 +90,23 @@ public class ventanaAdmin extends JFrame {
 		administrarDatos.add(btnCargarDatos, gbc_btnCargarDatos);
 		
 		JButton btnEliminar = new JButton("Eliminar");
+		btnEliminar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(listaRestaurantes.getSelectedIndex()!=-1)
+				{
+					try {
+						System.out.println(listaRestaurantes.getSelectedIndex());
+						Restaurante r = (Restaurante) listaRestaurantes.getSelectedValue();
+						String  id = r.getID();
+						mundoActual.eliminarRestaurante(id );
+						refrescarLista(mundoActual.darRestaurantesPrueba());
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						JOptionPane.showMessageDialog(panelPrincipal, "No se pudo eliminar");
+					}
+				}
+			}
+		});
 		GridBagConstraints gbc_btnEliminar = new GridBagConstraints();
 		gbc_btnEliminar.gridx = 0;
 		gbc_btnEliminar.gridy = 1;
@@ -97,6 +125,8 @@ public class ventanaAdmin extends JFrame {
 		
 		listaRestaurantes = new JList();
 		listaRestaurantes.setVisibleRowCount(25);
+		listaRestaurantes.addListSelectionListener(this);
+		listaRestaurantes.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		scrollPane.setViewportView(listaRestaurantes);
 	}
 	
@@ -119,6 +149,13 @@ public class ventanaAdmin extends JFrame {
 		{
 			JOptionPane.showMessageDialog(this, "No hay peliculas para su seleccion", "Informacion", JOptionPane.INFORMATION_MESSAGE);
 		}
+	}
+
+	@Override
+	public void valueChanged(ListSelectionEvent arg0) 
+	{
+		// TODO Auto-generated method stub
+		
 	}
 }
 
