@@ -48,7 +48,7 @@ public class ventanaInicial extends JFrame {
 	private JLabel lblUsername;
 	private JLabel lblPassword;
 	private JTextField textFieldUsername;
-	private JTextField textFieldPassword;
+	private JPasswordField textFieldPassword;
 	private JButton btnLogin;
 	private JPanel panelRegistrarse;
 	private JButton btnRegistro;
@@ -128,7 +128,7 @@ public class ventanaInicial extends JFrame {
 		gbc_lblPassword.gridy = 1;
 		panelUsuariosRegistrados.add(lblPassword, gbc_lblPassword);
 		
-		textFieldPassword = new JTextField();
+		textFieldPassword = new JPasswordField();
 		GridBagConstraints gbc_textFieldPassword = new GridBagConstraints();
 		gbc_textFieldPassword.insets = new Insets(0, 0, 5, 0);
 		gbc_textFieldPassword.fill = GridBagConstraints.HORIZONTAL;
