@@ -22,6 +22,7 @@ public class ConsultorRestaurantes implements IConsultorRestaurantes
 	private Categoria[] categoriasRestaurante; 
 	private Cocina[] cocinasRestaurante;
 	private Usuario usuarioRegistradoActual; 
+	private IListaEncadenadaDoble<Categoria> listaOrdenadaCategorias;
 	
 	public ConsultorRestaurantes()
 	{
@@ -31,6 +32,7 @@ public class ConsultorRestaurantes implements IConsultorRestaurantes
 		indiceActual = 0;
 		cocinasRestaurante = new Cocina[2310];
 		categoriasRestaurante = new Categoria[38];
+		listaOrdenadaCategorias = new ListaEncadenadaDoble<Categoria>();
 	}
 
 	@Override
@@ -200,6 +202,7 @@ public class ConsultorRestaurantes implements IConsultorRestaurantes
 					if(act.getNombre().equals(coc)&& act.getEstado().equals(ini.getEstado()))
 					{
 						act.bajarCantidad();
+						
 						borro = true;
 					}
 				}
@@ -213,8 +216,16 @@ public class ConsultorRestaurantes implements IConsultorRestaurantes
 					Categoria act = categoriasRestaurante[j];
 					if(act.getNombre().equals(coc))
 					{
+						
 						act.bajarCantidad();
+						try {
+							listaOrdenadaCategorias.eliminar(act, new comparadorNombreCategoria());
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 						borro = true;
+						listaOrdenadaCategorias.adicionar(act, new comparadorCantidadCategorias());
 					}
 				}
 			}
@@ -242,13 +253,21 @@ public class ConsultorRestaurantes implements IConsultorRestaurantes
 					{
 						if(actual.getNombre().equals(categoria))
 						{
+							try {
+								listaOrdenadaCategorias.eliminar(actual, new comparadorNombreCategoria());
+							} catch (Exception e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
 							actual.setCantidad();
 							teermino = true;
+							listaOrdenadaCategorias.adicionar(actual, new comparadorCantidadCategorias());
 						}
 					}
 					else
 					{
 						categoriasRestaurante[i] =  new Categoria(1, categoria);
+						listaOrdenadaCategorias.adicionar(categoriasRestaurante[i], new comparadorCantidadCategorias());
 						teermino = true;
 					}
 				}
@@ -296,14 +315,46 @@ public class ConsultorRestaurantes implements IConsultorRestaurantes
 
 		}
 	
-		public Categoria[] darCategorias()
+		public IListaEncadenadaDoble<Categoria> darCategorias()
 		{
-			return categoriasRestaurante;
+			return listaOrdenadaCategorias;
 		}
 		
 		public Cocina[] darCocinas()
 		{
 			return cocinasRestaurante;
+		}
+		
+		public Restaurante[] crearArregloPorLocacion(String estado, String ciudad)
+		{
+			IListaEncadenadaDoble<Restaurante> lista =  buscarPorLocacion(estado, ciudad);
+			Restaurante[] respuesta = new Restaurante[lista.darTamano()];
+			
+			Restaurante ini = lista.volverActualPrimero();
+			int indice = 0;
+			while(ini!=null)
+			{
+				respuesta[indice] = ini;
+				indice++;
+				ini = lista.adelantarse();
+			}
+			return respuesta;			
+		}
+		
+		public Restaurante[] crearArregloPorId(String id)
+		{
+			IListaEncadenadaDoble<Restaurante> lista =  buscarPorIdentidicadorCompuesto(id);
+			Restaurante[] respuesta = new Restaurante[lista.darTamano()];
+			
+			Restaurante ini = lista.volverActualPrimero();
+			int indice = 0;
+			while(ini!=null)
+			{
+				respuesta[indice] = ini;
+				indice++;
+				ini = lista.adelantarse();
+			}
+			return respuesta;			
 		}
 		
 		

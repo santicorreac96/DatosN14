@@ -75,5 +75,20 @@ public class Usuario extends Persona
 		}
 		return resp;
 	}
+	
+	public Restaurante[] filtrarFavoritoPorEstadoCocina(String estado, String cocina)
+	{
+		IListaEncadenadaDoble<Restaurante> lista = buscarRestaurantes(cocina, estado);
+		Restaurante[ ] resp = new Restaurante[lista.darTamano()];
+		int indice = 0;
+		Restaurante ini = lista.volverActualPrimero();
+		while(ini!=null)
+		{
+			resp[indice] = ini;
+			indice++;
+			ini = lista.adelantarse();
+		}
+		return resp;
+	}
 
 }

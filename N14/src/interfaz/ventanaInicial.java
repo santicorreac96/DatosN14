@@ -23,6 +23,9 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 
 
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Component;
@@ -75,6 +78,7 @@ public class ventanaInicial extends JFrame {
 	 */
 	public ventanaInicial() {
 		aplicacion = new ConsultorRestaurantes();
+		aplicacion.cargarXLS();
 		setTitle("RestauApp");
 		setResizable(false);
 		setSize(new Dimension(300, 300));

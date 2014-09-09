@@ -3,7 +3,13 @@ package interfaz;
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
+import javafx.embed.swing.JFXPanel;
+import javafx.stage.Stage;
+
+import javax.swing.ButtonGroup;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
@@ -26,25 +32,42 @@ import java.awt.Rectangle;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.border.TitledBorder;
+
 import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+
 import javax.swing.JInternalFrame;
+
 import java.awt.Font;
+
 import javax.swing.JDesktopPane;
+
 import java.awt.Label;
+
 import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import mundo.ConsultorRestaurantes;
+import mundo.Mapa;
+import mundo.Restaurante;
+import mundo.creadorGraficoPie;
 
 import java.awt.Color;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+
 import javax.swing.JList;
 import javax.swing.JRadioButton;
+import javax.swing.SwingConstants;
 
-public class ventanaUsuario extends JFrame implements ListSelectionListener
+public class ventanaUsuario extends JFrame implements ListSelectionListener, ActionListener
 {
 
 	private JPanel panelPrincipal;
@@ -65,38 +88,55 @@ public class ventanaUsuario extends JFrame implements ListSelectionListener
 	private JButton btnGráficaCategorias;
 	private JPanel panelInfo;
 	private Label labelNombre;
-	private Label labCNombre;
 	private Label labelCiudad;
-	private Label labCCiudad;
 	private Label labelEstado;
-	private Label labCEstado;
 	private Label labDireccion;
-	private Label labCDireccion;
 	private Label labCocina;
-	private Label labCCocina;
 	private Label labCategoria;
-	private Label label_11;
 	private Label labTelefono;
-	private Label labCTelefono;
 	private Label labHorario;
-	private Label labCHorario;
 	private ventanaInicial principal;
 	private ConsultorRestaurantes consultorAct;
 	private JList listaFavoritos;
 	private JList listaBusqueda;
-	private JRadioButton radioButton;
-	private JRadioButton radioButton_1;
+	private JRadioButton radioListaNormal;
+	private JRadioButton radioListaFavortios;
 	private JLabel LabelFiltro;
-	private JTextField textField;
+	private JTextField textoBusquedaNombre;
 	private JLabel lblNombre;
 	private JLabel lblCiudad;
-	private JTextField textField_1;
+	private JTextField textoBusquedaCiudad;
 	private JLabel lblEstado;
-	private JTextField textField_2;
+	private JTextField textoBusquedaEstado;
 	private JLabel lblTipoCocina;
-	private JTextField textField_3;
+	private JTextField textoBusquedaCocina;
 	private JButton botonBusqueda;
-
+	private JScrollPane scrollPane;
+	private JScrollPane scrollPane_1;
+	private JScrollPane scrollPane_2;
+	private JScrollPane scrollPane_3;
+	private JScrollPane scrollPane_4;
+	private JScrollPane scrollPane_5;
+	private JScrollPane scrollPane_6;
+	private JScrollPane scrollPane_7;
+	private JLabel lblPaginaWeb;
+	private JLabel lblCodigoPostal;
+	private JScrollPane scrollPane_8;
+	private JScrollPane scrollPane_9;
+	private JTextField txtNombre;
+	private JTextField txtCocina;
+	private JTextField txtCiudad;
+	private JTextField txtCategoria;
+	private JTextField txtEstado;
+	private JTextField txtTelefono;
+	private JTextField txtDireccion;
+	private JTextField txtWeb;
+	private JTextField txtHorario;
+	private JTextField txtCodigoPostal;
+	private JPanel panelMapa;
+	private Restaurante visualizado;
+	private int listaFiltrar;
+	private JFXPanel pane;
 
 
 	/**
@@ -104,7 +144,7 @@ public class ventanaUsuario extends JFrame implements ListSelectionListener
 	 */
 	public ventanaUsuario(ConsultorRestaurantes cons) {
 		consultorAct=cons;
-		setSize(new Dimension(1000, 750));
+		setSize(new Dimension(1000, 720));
 		setResizable(false);
 		setTitle("RESTAU-Usuario");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -145,30 +185,31 @@ public class ventanaUsuario extends JFrame implements ListSelectionListener
 		gbc_lblEstado.gridy = 0;
 		panelBusquedas.add(lblEstado, gbc_lblEstado);
 		
-		radioButton = new JRadioButton("New radio button");
-		GridBagConstraints gbc_radioButton = new GridBagConstraints();
-		gbc_radioButton.insets = new Insets(0, 0, 5, 5);
-		gbc_radioButton.gridx = 0;
-		gbc_radioButton.gridy = 1;
-		panelBusquedas.add(radioButton, gbc_radioButton);
+		radioListaNormal = new JRadioButton("Lista Busqueda");
+		radioListaNormal.addActionListener(this);
+		GridBagConstraints gbc_radioListaNormal = new GridBagConstraints();
+		gbc_radioListaNormal.insets = new Insets(0, 0, 5, 5);
+		gbc_radioListaNormal.gridx = 0;
+		gbc_radioListaNormal.gridy = 1;
+		panelBusquedas.add(radioListaNormal, gbc_radioListaNormal);
 		
-		textField = new JTextField();
-		GridBagConstraints gbc_textField = new GridBagConstraints();
-		gbc_textField.insets = new Insets(0, 0, 5, 5);
-		gbc_textField.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textField.gridx = 1;
-		gbc_textField.gridy = 1;
-		panelBusquedas.add(textField, gbc_textField);
-		textField.setColumns(10);
+		textoBusquedaNombre = new JTextField();
+		GridBagConstraints gbc_textoBusquedaNombre = new GridBagConstraints();
+		gbc_textoBusquedaNombre.insets = new Insets(0, 0, 5, 5);
+		gbc_textoBusquedaNombre.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textoBusquedaNombre.gridx = 1;
+		gbc_textoBusquedaNombre.gridy = 1;
+		panelBusquedas.add(textoBusquedaNombre, gbc_textoBusquedaNombre);
+		textoBusquedaNombre.setColumns(10);
 		
-		textField_2 = new JTextField();
-		GridBagConstraints gbc_textField_2 = new GridBagConstraints();
-		gbc_textField_2.insets = new Insets(0, 0, 5, 5);
-		gbc_textField_2.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textField_2.gridx = 2;
-		gbc_textField_2.gridy = 1;
-		panelBusquedas.add(textField_2, gbc_textField_2);
-		textField_2.setColumns(10);
+		textoBusquedaEstado = new JTextField();
+		GridBagConstraints gbc_textoBusquedaEstado = new GridBagConstraints();
+		gbc_textoBusquedaEstado.insets = new Insets(0, 0, 5, 5);
+		gbc_textoBusquedaEstado.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textoBusquedaEstado.gridx = 2;
+		gbc_textoBusquedaEstado.gridy = 1;
+		panelBusquedas.add(textoBusquedaEstado, gbc_textoBusquedaEstado);
+		textoBusquedaEstado.setColumns(10);
 		
 		lblCiudad = new JLabel("Ciudad");
 		GridBagConstraints gbc_lblCiudad = new GridBagConstraints();
@@ -185,6 +226,8 @@ public class ventanaUsuario extends JFrame implements ListSelectionListener
 		panelBusquedas.add(lblTipoCocina, gbc_lblTipoCocina);
 		
 		botonBusqueda = new JButton("Filtrar");
+		botonBusqueda.addActionListener(this);
+		botonBusqueda.setActionCommand("busq");
 		GridBagConstraints gbc_botonBusqueda = new GridBagConstraints();
 		gbc_botonBusqueda.gridheight = 3;
 		gbc_botonBusqueda.insets = new Insets(0, 0, 5, 0);
@@ -192,30 +235,31 @@ public class ventanaUsuario extends JFrame implements ListSelectionListener
 		gbc_botonBusqueda.gridy = 1;
 		panelBusquedas.add(botonBusqueda, gbc_botonBusqueda);
 		
-		radioButton_1 = new JRadioButton("New radio button");
-		GridBagConstraints gbc_radioButton_1 = new GridBagConstraints();
-		gbc_radioButton_1.insets = new Insets(0, 0, 0, 5);
-		gbc_radioButton_1.gridx = 0;
-		gbc_radioButton_1.gridy = 3;
-		panelBusquedas.add(radioButton_1, gbc_radioButton_1);
+		radioListaFavortios = new JRadioButton("Lista Favoritos");
+		radioListaFavortios.addActionListener(this);
+		GridBagConstraints gbc_radioListaFavortios = new GridBagConstraints();
+		gbc_radioListaFavortios.insets = new Insets(0, 0, 0, 5);
+		gbc_radioListaFavortios.gridx = 0;
+		gbc_radioListaFavortios.gridy = 3;
+		panelBusquedas.add(radioListaFavortios, gbc_radioListaFavortios);
 		
-		textField_1 = new JTextField();
-		GridBagConstraints gbc_textField_1 = new GridBagConstraints();
-		gbc_textField_1.insets = new Insets(0, 0, 0, 5);
-		gbc_textField_1.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textField_1.gridx = 1;
-		gbc_textField_1.gridy = 3;
-		panelBusquedas.add(textField_1, gbc_textField_1);
-		textField_1.setColumns(10);
+		textoBusquedaCiudad = new JTextField();
+		GridBagConstraints gbc_textoBusquedaCiudad = new GridBagConstraints();
+		gbc_textoBusquedaCiudad.insets = new Insets(0, 0, 0, 5);
+		gbc_textoBusquedaCiudad.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textoBusquedaCiudad.gridx = 1;
+		gbc_textoBusquedaCiudad.gridy = 3;
+		panelBusquedas.add(textoBusquedaCiudad, gbc_textoBusquedaCiudad);
+		textoBusquedaCiudad.setColumns(10);
 		
-		textField_3 = new JTextField();
-		GridBagConstraints gbc_textField_3 = new GridBagConstraints();
-		gbc_textField_3.insets = new Insets(0, 0, 0, 5);
-		gbc_textField_3.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textField_3.gridx = 2;
-		gbc_textField_3.gridy = 3;
-		panelBusquedas.add(textField_3, gbc_textField_3);
-		textField_3.setColumns(10);
+		textoBusquedaCocina = new JTextField();
+		GridBagConstraints gbc_textoBusquedaCocina = new GridBagConstraints();
+		gbc_textoBusquedaCocina.insets = new Insets(0, 0, 0, 5);
+		gbc_textoBusquedaCocina.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textoBusquedaCocina.gridx = 2;
+		gbc_textoBusquedaCocina.gridy = 3;
+		panelBusquedas.add(textoBusquedaCocina, gbc_textoBusquedaCocina);
+		textoBusquedaCocina.setColumns(10);
 		
 		panelListas = new JPanel();
 		panelListas.setBorder(new TitledBorder(null, "Listas ", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -249,6 +293,7 @@ public class ventanaUsuario extends JFrame implements ListSelectionListener
 		panelListas.add(scrollPaneListaFavoritos, gbc_scrollPaneListaFavoritos);
 		
 		listaFavoritos = new JList();
+		listaFavoritos.addListSelectionListener(this);
 		scrollPaneListaFavoritos.setViewportView(listaFavoritos);
 		
 		lblListaBusquedas = new JLabel("Lista Busquedas");
@@ -268,6 +313,7 @@ public class ventanaUsuario extends JFrame implements ListSelectionListener
 		panelListas.add(scrollPaneListaBusquedas, gbc_scrollPaneListaBusquedas);		
 		
 		listaBusqueda = new JList();
+		listaBusqueda.addListSelectionListener(this);
 		scrollPaneListaBusquedas.setViewportView(listaBusqueda);
 		
 		panelCentralGeneral = new JPanel();
@@ -334,6 +380,12 @@ public class ventanaUsuario extends JFrame implements ListSelectionListener
 		panelBotonesGraficas.setLayout(gbl_panelBotonesGraficas);
 		
 		btnGráficaCategorias = new JButton("Gr\u00E1fica categor\u00EDas");
+		btnGráficaCategorias.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				JDialog dialogo = new JDialog(principal);
+				new creadorGraficoPie("Categorias Ranking", consultorAct.darCategorias()).setVisible(true);;
+			}
+		});
 		GridBagConstraints gbc_btnGráficaCategorias = new GridBagConstraints();
 		gbc_btnGráficaCategorias.insets = new Insets(0, 0, 5, 0);
 		gbc_btnGráficaCategorias.gridx = 0;
@@ -348,13 +400,13 @@ public class ventanaUsuario extends JFrame implements ListSelectionListener
 		panelBotonesGraficas.add(btnGraficaTipos, gbc_btnGraficaTipos);
 		
 		panelInfo = new JPanel();
-		panelInfo.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Info Restaurante", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panelInfo.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Información Restaurante", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panelCentral.add(panelInfo, BorderLayout.CENTER);
 		GridBagLayout gbl_panelInfo = new GridBagLayout();
 		gbl_panelInfo.columnWidths = new int[]{0, 131, 133, 0, 124, 127, 0};
-		gbl_panelInfo.rowHeights = new int[]{130, 125, 113, 117, 0};
-		gbl_panelInfo.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
-		gbl_panelInfo.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_panelInfo.rowHeights = new int[]{47, 45, 46, 31, 46, 300, 0};
+		gbl_panelInfo.columnWeights = new double[]{0.0, 1.0, 1.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
+		gbl_panelInfo.rowWeights = new double[]{1.0, 1.0, 1.0, 0.0, 1.0, 1.0, Double.MIN_VALUE};
 		panelInfo.setLayout(gbl_panelInfo);
 		
 		labelNombre = new Label("Nombre:");
@@ -365,13 +417,17 @@ public class ventanaUsuario extends JFrame implements ListSelectionListener
 		gbc_labelNombre.gridy = 0;
 		panelInfo.add(labelNombre, gbc_labelNombre);
 		
-		labCNombre = new Label("");
-		GridBagConstraints gbc_labCNombre = new GridBagConstraints();
-		gbc_labCNombre.anchor = GridBagConstraints.WEST;
-		gbc_labCNombre.insets = new Insets(0, 0, 5, 5);
-		gbc_labCNombre.gridx = 2;
-		gbc_labCNombre.gridy = 0;
-		panelInfo.add(labCNombre, gbc_labCNombre);
+		scrollPane = new JScrollPane();
+		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
+		gbc_scrollPane.insets = new Insets(0, 0, 5, 5);
+		gbc_scrollPane.fill = GridBagConstraints.BOTH;
+		gbc_scrollPane.gridx = 2;
+		gbc_scrollPane.gridy = 0;
+		panelInfo.add(scrollPane, gbc_scrollPane);
+		
+		txtNombre = new JTextField();
+		scrollPane.setViewportView(txtNombre);
+		txtNombre.setColumns(10);
 		
 		labCocina = new Label("Cocina:");
 		GridBagConstraints gbc_labCocina = new GridBagConstraints();
@@ -381,13 +437,17 @@ public class ventanaUsuario extends JFrame implements ListSelectionListener
 		gbc_labCocina.gridy = 0;
 		panelInfo.add(labCocina, gbc_labCocina);
 		
-		labCCocina = new Label("");
-		GridBagConstraints gbc_labCCocina = new GridBagConstraints();
-		gbc_labCCocina.anchor = GridBagConstraints.WEST;
-		gbc_labCCocina.insets = new Insets(0, 0, 5, 0);
-		gbc_labCCocina.gridx = 5;
-		gbc_labCCocina.gridy = 0;
-		panelInfo.add(labCCocina, gbc_labCCocina);
+		scrollPane_2 = new JScrollPane();
+		GridBagConstraints gbc_scrollPane_2 = new GridBagConstraints();
+		gbc_scrollPane_2.insets = new Insets(0, 0, 5, 0);
+		gbc_scrollPane_2.fill = GridBagConstraints.BOTH;
+		gbc_scrollPane_2.gridx = 5;
+		gbc_scrollPane_2.gridy = 0;
+		panelInfo.add(scrollPane_2, gbc_scrollPane_2);
+		
+		txtCocina = new JTextField();
+		scrollPane_2.setViewportView(txtCocina);
+		txtCocina.setColumns(10);
 		
 		labelCiudad = new Label("Ciudad:");
 		GridBagConstraints gbc_labelCiudad = new GridBagConstraints();
@@ -397,13 +457,17 @@ public class ventanaUsuario extends JFrame implements ListSelectionListener
 		gbc_labelCiudad.gridy = 1;
 		panelInfo.add(labelCiudad, gbc_labelCiudad);
 		
-		labCCiudad = new Label("");
-		GridBagConstraints gbc_labCCiudad = new GridBagConstraints();
-		gbc_labCCiudad.anchor = GridBagConstraints.WEST;
-		gbc_labCCiudad.insets = new Insets(0, 0, 5, 5);
-		gbc_labCCiudad.gridx = 2;
-		gbc_labCCiudad.gridy = 1;
-		panelInfo.add(labCCiudad, gbc_labCCiudad);
+		scrollPane_1 = new JScrollPane();
+		GridBagConstraints gbc_scrollPane_1 = new GridBagConstraints();
+		gbc_scrollPane_1.insets = new Insets(0, 0, 5, 5);
+		gbc_scrollPane_1.fill = GridBagConstraints.BOTH;
+		gbc_scrollPane_1.gridx = 2;
+		gbc_scrollPane_1.gridy = 1;
+		panelInfo.add(scrollPane_1, gbc_scrollPane_1);
+		
+		txtCiudad = new JTextField();
+		scrollPane_1.setViewportView(txtCiudad);
+		txtCiudad.setColumns(10);
 		
 		labCategoria = new Label("Categor\u00EDa:");
 		GridBagConstraints gbc_labCategoria = new GridBagConstraints();
@@ -413,13 +477,17 @@ public class ventanaUsuario extends JFrame implements ListSelectionListener
 		gbc_labCategoria.gridy = 1;
 		panelInfo.add(labCategoria, gbc_labCategoria);
 		
-		label_11 = new Label("");
-		GridBagConstraints gbc_label_11 = new GridBagConstraints();
-		gbc_label_11.anchor = GridBagConstraints.WEST;
-		gbc_label_11.insets = new Insets(0, 0, 5, 0);
-		gbc_label_11.gridx = 5;
-		gbc_label_11.gridy = 1;
-		panelInfo.add(label_11, gbc_label_11);
+		scrollPane_3 = new JScrollPane();
+		GridBagConstraints gbc_scrollPane_3 = new GridBagConstraints();
+		gbc_scrollPane_3.insets = new Insets(0, 0, 5, 0);
+		gbc_scrollPane_3.fill = GridBagConstraints.BOTH;
+		gbc_scrollPane_3.gridx = 5;
+		gbc_scrollPane_3.gridy = 1;
+		panelInfo.add(scrollPane_3, gbc_scrollPane_3);
+		
+		txtCategoria = new JTextField();
+		scrollPane_3.setViewportView(txtCategoria);
+		txtCategoria.setColumns(10);
 		
 		labelEstado = new Label("Estado:");
 		GridBagConstraints gbc_labelEstado = new GridBagConstraints();
@@ -429,13 +497,17 @@ public class ventanaUsuario extends JFrame implements ListSelectionListener
 		gbc_labelEstado.gridy = 2;
 		panelInfo.add(labelEstado, gbc_labelEstado);
 		
-		labCEstado = new Label("");
-		GridBagConstraints gbc_labCEstado = new GridBagConstraints();
-		gbc_labCEstado.anchor = GridBagConstraints.WEST;
-		gbc_labCEstado.insets = new Insets(0, 0, 5, 5);
-		gbc_labCEstado.gridx = 2;
-		gbc_labCEstado.gridy = 2;
-		panelInfo.add(labCEstado, gbc_labCEstado);
+		scrollPane_4 = new JScrollPane();
+		GridBagConstraints gbc_scrollPane_4 = new GridBagConstraints();
+		gbc_scrollPane_4.insets = new Insets(0, 0, 5, 5);
+		gbc_scrollPane_4.fill = GridBagConstraints.BOTH;
+		gbc_scrollPane_4.gridx = 2;
+		gbc_scrollPane_4.gridy = 2;
+		panelInfo.add(scrollPane_4, gbc_scrollPane_4);
+		
+		txtEstado = new JTextField();
+		scrollPane_4.setViewportView(txtEstado);
+		txtEstado.setColumns(10);
 		
 		labTelefono = new Label("Tel\u00E9fono:");
 		GridBagConstraints gbc_labTelefono = new GridBagConstraints();
@@ -445,45 +517,133 @@ public class ventanaUsuario extends JFrame implements ListSelectionListener
 		gbc_labTelefono.gridy = 2;
 		panelInfo.add(labTelefono, gbc_labTelefono);
 		
-		labCTelefono = new Label("");
-		GridBagConstraints gbc_labCTelefono = new GridBagConstraints();
-		gbc_labCTelefono.anchor = GridBagConstraints.WEST;
-		gbc_labCTelefono.insets = new Insets(0, 0, 5, 0);
-		gbc_labCTelefono.gridx = 5;
-		gbc_labCTelefono.gridy = 2;
-		panelInfo.add(labCTelefono, gbc_labCTelefono);
+		scrollPane_5 = new JScrollPane();
+		GridBagConstraints gbc_scrollPane_5 = new GridBagConstraints();
+		gbc_scrollPane_5.insets = new Insets(0, 0, 5, 0);
+		gbc_scrollPane_5.fill = GridBagConstraints.BOTH;
+		gbc_scrollPane_5.gridx = 5;
+		gbc_scrollPane_5.gridy = 2;
+		panelInfo.add(scrollPane_5, gbc_scrollPane_5);
+		
+		txtTelefono = new JTextField();
+		scrollPane_5.setViewportView(txtTelefono);
+		txtTelefono.setColumns(10);
 		
 		labDireccion = new Label("Direcci\u00F3n:");
 		GridBagConstraints gbc_labDireccion = new GridBagConstraints();
 		gbc_labDireccion.anchor = GridBagConstraints.EAST;
-		gbc_labDireccion.insets = new Insets(0, 0, 0, 5);
+		gbc_labDireccion.insets = new Insets(0, 0, 5, 5);
 		gbc_labDireccion.gridx = 1;
 		gbc_labDireccion.gridy = 3;
 		panelInfo.add(labDireccion, gbc_labDireccion);
 		
-		labCDireccion = new Label("");
-		GridBagConstraints gbc_labCDireccion = new GridBagConstraints();
-		gbc_labCDireccion.anchor = GridBagConstraints.WEST;
-		gbc_labCDireccion.insets = new Insets(0, 0, 0, 5);
-		gbc_labCDireccion.gridx = 2;
-		gbc_labCDireccion.gridy = 3;
-		panelInfo.add(labCDireccion, gbc_labCDireccion);
+		scrollPane_6 = new JScrollPane();
+		GridBagConstraints gbc_scrollPane_6 = new GridBagConstraints();
+		gbc_scrollPane_6.insets = new Insets(0, 0, 5, 5);
+		gbc_scrollPane_6.fill = GridBagConstraints.BOTH;
+		gbc_scrollPane_6.gridx = 2;
+		gbc_scrollPane_6.gridy = 3;
+		panelInfo.add(scrollPane_6, gbc_scrollPane_6);
+		
+		txtDireccion = new JTextField();
+		scrollPane_6.setViewportView(txtDireccion);
+		txtDireccion.setColumns(10);
 		
 		labHorario = new Label("Horario:");
 		GridBagConstraints gbc_labHorario = new GridBagConstraints();
 		gbc_labHorario.anchor = GridBagConstraints.EAST;
-		gbc_labHorario.insets = new Insets(0, 0, 0, 5);
+		gbc_labHorario.insets = new Insets(0, 0, 5, 5);
 		gbc_labHorario.gridx = 4;
 		gbc_labHorario.gridy = 3;
 		panelInfo.add(labHorario, gbc_labHorario);
 		
-		labCHorario = new Label("");
-		GridBagConstraints gbc_labCHorario = new GridBagConstraints();
-		gbc_labCHorario.anchor = GridBagConstraints.WEST;
-		gbc_labCHorario.gridx = 5;
-		gbc_labCHorario.gridy = 3;
-		panelInfo.add(labCHorario, gbc_labCHorario);
+		scrollPane_7 = new JScrollPane();
+		GridBagConstraints gbc_scrollPane_7 = new GridBagConstraints();
+		gbc_scrollPane_7.insets = new Insets(0, 0, 5, 0);
+		gbc_scrollPane_7.fill = GridBagConstraints.BOTH;
+		gbc_scrollPane_7.gridx = 5;
+		gbc_scrollPane_7.gridy = 3;
+		panelInfo.add(scrollPane_7, gbc_scrollPane_7);
 		
+		txtHorario = new JTextField();
+		scrollPane_7.setViewportView(txtHorario);
+		txtHorario.setColumns(10);
+		
+		lblPaginaWeb = new JLabel("Pagina Web:  ");
+		lblPaginaWeb.setHorizontalAlignment(SwingConstants.LEFT);
+		GridBagConstraints gbc_lblPaginaWeb = new GridBagConstraints();
+		gbc_lblPaginaWeb.anchor = GridBagConstraints.EAST;
+		gbc_lblPaginaWeb.insets = new Insets(0, 0, 5, 5);
+		gbc_lblPaginaWeb.gridx = 1;
+		gbc_lblPaginaWeb.gridy = 4;
+		panelInfo.add(lblPaginaWeb, gbc_lblPaginaWeb);
+		
+		scrollPane_8 = new JScrollPane();
+		GridBagConstraints gbc_scrollPane_8 = new GridBagConstraints();
+		gbc_scrollPane_8.insets = new Insets(0, 0, 5, 5);
+		gbc_scrollPane_8.fill = GridBagConstraints.BOTH;
+		gbc_scrollPane_8.gridx = 2;
+		gbc_scrollPane_8.gridy = 4;
+		panelInfo.add(scrollPane_8, gbc_scrollPane_8);
+		
+		txtWeb = new JTextField();
+		scrollPane_8.setViewportView(txtWeb);
+		txtWeb.setColumns(10);
+		
+		lblCodigoPostal = new JLabel("Codigo Postal:  ");
+		GridBagConstraints gbc_lblCodigoPostal = new GridBagConstraints();
+		gbc_lblCodigoPostal.anchor = GridBagConstraints.EAST;
+		gbc_lblCodigoPostal.insets = new Insets(0, 0, 5, 5);
+		gbc_lblCodigoPostal.gridx = 4;
+		gbc_lblCodigoPostal.gridy = 4;
+		panelInfo.add(lblCodigoPostal, gbc_lblCodigoPostal);
+		
+		scrollPane_9 = new JScrollPane();
+		GridBagConstraints gbc_scrollPane_9 = new GridBagConstraints();
+		gbc_scrollPane_9.insets = new Insets(0, 0, 5, 0);
+		gbc_scrollPane_9.fill = GridBagConstraints.BOTH;
+		gbc_scrollPane_9.gridx = 5;
+		gbc_scrollPane_9.gridy = 4;
+		panelInfo.add(scrollPane_9, gbc_scrollPane_9);
+		
+		txtCodigoPostal = new JTextField();
+		scrollPane_9.setViewportView(txtCodigoPostal);
+		txtCodigoPostal.setColumns(10);
+		
+		panelMapa = new JPanel();
+		GridBagConstraints gbc_panelMapa = new GridBagConstraints();
+		gbc_panelMapa.gridwidth = 5;
+		gbc_panelMapa.insets = new Insets(0, 0, 0, 5);
+		gbc_panelMapa.fill = GridBagConstraints.BOTH;
+		gbc_panelMapa.gridx = 1;
+		gbc_panelMapa.gridy = 5;
+		panelInfo.add(panelMapa, gbc_panelMapa);
+		
+		ButtonGroup grupoBotones = new ButtonGroup();
+		grupoBotones.add(radioListaFavortios);
+		grupoBotones.add(radioListaNormal);
+		
+		listaFiltrar=2;
+		textoBusquedaCocina.setEditable(false);
+		textoBusquedaNombre.setEditable(true);
+		textoBusquedaCiudad.setEditable(true);
+		
+		txtNombre.setEditable(false);
+		txtTelefono.setEditable(false);
+		txtCategoria.setEditable(false);
+		txtCocina.setEditable(false);
+		txtCiudad.setEditable(false);
+		txtCodigoPostal.setEditable(false);
+		txtDireccion.setEditable(false);
+		txtEstado.setEditable(false);
+		txtHorario.setEditable(false);
+		txtWeb.setEditable(false);
+		
+		pane = new JFXPanel();
+		JScrollPane scrool = new JScrollPane();
+		//scrool.setViewportView(pane);
+		panelMapa.setLayout(new BorderLayout());
+		panelMapa.add(scrool, BorderLayout.CENTER);
 	}
 
 	public void setPrincipal(ventanaInicial pPrincipal) 
@@ -493,9 +653,175 @@ public class ventanaUsuario extends JFrame implements ListSelectionListener
 	}
 
 	@Override
-	public void valueChanged(ListSelectionEvent arg0) {
-		// TODO Auto-generated method stub
+	public void valueChanged(ListSelectionEvent l)
+	{
+		if(l.getSource().equals(listaBusqueda))
+		{
+			if(listaBusqueda.getSelectedValue()!=null)
+			{
+				visualizado = (Restaurante) listaBusqueda.getSelectedValue();
+				refrescarInformacionVisualizada();
+			}
+		}
+		else if(l.getSource().equals(listaFavoritos))
+		{
+			if(listaFavoritos.getSelectedValue()!=null)
+			{
+				visualizado = (Restaurante) listaFavoritos.getSelectedValue();
+				refrescarInformacionVisualizada();
+			}
+		}
 		
+	}
+	
+	public void refrescarListaFavoritos(Restaurante[] restaurantes)
+	{
+		listaFavoritos.removeAll();
+		listaFavoritos.setListData(restaurantes);
+		listaFavoritos.setSelectedIndex(-1);
+		listaFavoritos.updateUI();
+	}
+	
+	public void refrescarListaBusqueda(Restaurante[] restaurantes)
+	{
+		listaBusqueda.removeAll();
+		listaBusqueda.setListData(restaurantes);
+		listaBusqueda.setSelectedIndex(-1);
+		listaBusqueda.updateUI();
+	}
+	
+	public void refrescarInformacionVisualizada()
+	{
+		txtNombre.setText(visualizado.getNombre());
+		txtTelefono.setText(visualizado.getTelefono());
+		txtCategoria.setText(visualizado.getCategoria());
+		txtCocina.setText(visualizado.getCocina());
+		txtCiudad.setText(visualizado.getCiudad());
+		txtCodigoPostal.setText(visualizado.getPostal());
+		txtDireccion.setText(visualizado.getDireccion());
+		txtEstado.setText(visualizado.getEstado());
+		txtHorario.setText(visualizado.getHorario());
+		txtWeb.setText(visualizado.getWeb());
+		
+		if(txtHorario.getText().equals(""))
+		{
+			txtHorario.setText("Información No Disponible");
+		}
+		if(txtCodigoPostal.getText().equals(""))
+		{
+			txtCodigoPostal.setText("Información No Disponible");
+		}
+		if(txtDireccion.getText().equals(""))
+		{
+			txtDireccion.setText("Información No Disponible");
+		}
+		if(txtTelefono.getText().equals(""))
+		{
+			txtTelefono.setText("Información No Disponible");
+		}
+		if(txtWeb.getText().equals(""))
+		{
+			txtWeb.setText("Información No Disponible");
+		}
+		crearArchivoMapa(visualizado.getLongitud(), visualizado.getLatitud());
+		Mapa nuevo = new Mapa(pane, visualizado.getNombre());
+		nuevo.start();
+		repaint();
+		revalidate();
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) 
+	{
+		String comando = e.getActionCommand();
+		if(comando.equals(radioListaFavortios.getActionCommand()))
+		{
+			listaFiltrar=1;
+			textoBusquedaNombre.setEditable(false);
+			textoBusquedaCiudad.setEditable(false);
+			textoBusquedaCocina.setEditable(true);
+		}
+		else if(comando.equals(radioListaNormal.getActionCommand()))
+		{
+			listaFiltrar=2;
+			textoBusquedaCocina.setEditable(false);
+			textoBusquedaNombre.setEditable(true);
+			textoBusquedaCiudad.setEditable(true);
+		}
+		else if(botonBusqueda.getActionCommand().equals(comando))
+		{
+			if(listaFiltrar==1)
+			{
+				if(textoBusquedaCocina.getText().equals("")||textoBusquedaEstado.getText().equals(""))
+				{
+					try {
+						throw new Exception("Debe llenar todos los campos de busqueda.");
+					} catch (Exception e1) {
+						// TODO Auto-generated catch block
+						JOptionPane.showMessageDialog(this, e1.getMessage());
+					}
+				}
+				else
+				{
+					Restaurante[] restaurantes = consultorAct.darUsuarioActual().filtrarFavoritoPorEstadoCocina(textoBusquedaEstado.getText(), textoBusquedaCocina.getText());
+					refrescarListaFavoritos(restaurantes);
+				}
+			}
+			else if(listaFiltrar==2)
+			{
+				if(textoBusquedaNombre.getText().equals("")||textoBusquedaEstado.getText().equals("")||textoBusquedaCiudad.getText().equals(""))
+				{
+					try {
+						throw new Exception("Debe llenar todos los campos de busqueda.");
+					} catch (Exception e1) {
+						// TODO Auto-generated catch block
+						JOptionPane.showMessageDialog(this, e1.getMessage());
+					}
+				}
+				else
+				{
+					Restaurante[] restaurantes = consultorAct.crearArregloPorId(textoBusquedaNombre.getText()+"-"+textoBusquedaCiudad.getText()+"-"+textoBusquedaEstado.getText());
+					refrescarListaBusqueda(restaurantes);
+				}
+			}
+		}
+	}
+	
+	public void crearArchivoMapa(String longitud , String latitud)
+	{
+		if(longitud.equals("")||latitud.equals(""))
+		{
+			
+		}
+		else
+		{
+			File mapa = new File("./datos/mapaFinal.html");
+			try 
+			{
+				PrintWriter escritor = new PrintWriter(mapa);
+				BufferedReader lector = new BufferedReader(new FileReader(new File("./datos/mapa.html")));
+				String linea = lector.readLine();
+				while(linea!=null)
+				{
+					String texto = linea;
+					if(linea.contains("longitud")&& linea.contains("latitud"))
+					{
+						texto = texto.replace("longitud", longitud);
+						texto = texto.replace("latitud", latitud);
+					}
+					escritor.println(texto);
+					linea = lector.readLine();
+				}
+				escritor.close();
+				lector.close();
+			} 
+			catch (IOException e) 
+			{
+				JOptionPane.showMessageDialog(this, "No se pudo crear mapa");
+			}
+
+		}
+
 	}
 
 }

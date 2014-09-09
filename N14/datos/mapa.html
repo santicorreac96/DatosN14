@@ -14,7 +14,7 @@
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
     <script>
 function initialize() {
-  var myLatlng = new google.maps.LatLng(36.093567,-95.923745);
+  var myLatlng = new google.maps.LatLng(latitud,longitud);
   var mapOptions = {
     zoom: 20,
     center: myLatlng
@@ -24,7 +24,7 @@ function initialize() {
   var marker = new google.maps.Marker({
       position: myLatlng,
       map: map,
-      title: 'Hello World!'
+      title: 'Tu Restaurante'
   });
 }
 
