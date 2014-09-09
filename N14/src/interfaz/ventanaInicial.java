@@ -55,6 +55,7 @@ public class ventanaInicial extends JFrame {
 	private JButton btnLoginAdmin;
 	private JPasswordField textFieldAdmin;
 	private ConsultorRestaurantes aplicacion;
+	private ventanaInicial principal;
 
 
 	/**
@@ -90,6 +91,7 @@ public class ventanaInicial extends JFrame {
 		panelPrincipal.setBorder(new EmptyBorder(5, 5, 5, 5));
 		panelPrincipal.setLayout(new BorderLayout(0, 0));
 		setContentPane(panelPrincipal);
+		principal = this;
 		
 		JPanel panelUsuariosRegistrados = new JPanel();
 		panelUsuariosRegistrados.setSize(new Dimension(300, 300));
@@ -161,6 +163,13 @@ public class ventanaInicial extends JFrame {
 		panelRegistrarse.setLayout(gbl_panelRegistrarse);
 		
 		btnRegistro = new JButton("Registrarse");
+		btnRegistro.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				DialogoRegistroUsuario registroUsuario = new DialogoRegistroUsuario(principal);
+				registroUsuario.setModal(true);
+				registroUsuario.setVisible(true);
+			}
+		});
 		GridBagConstraints gbc_btnRegistro = new GridBagConstraints();
 		gbc_btnRegistro.gridx = 0;
 		gbc_btnRegistro.gridy = 1;
@@ -222,16 +231,28 @@ public class ventanaInicial extends JFrame {
 	
 	public void mostrarInterfazUsuario()
 	{
-		if (textFieldUsername.getText().equals("usuario") && textFieldPassword.getText().equals("usuario"))
+		if(textFieldUsername.getText().equals("") || textFieldPassword.getText().equals(""))
 		{
-			ventanaUsuario usuario = new ventanaUsuario(aplicacion);
-			usuario.setPrincipal(this);
-			usuario.setVisible(true);
+			JOptionPane.showMessageDialog(this, "Debe llenar toda la información de verificación");
 		}
 		else
 		{
-			JOptionPane.showMessageDialog(this, "Contraseña incorrecta", "Informacion", JOptionPane.INFORMATION_MESSAGE);
+			if(aplicacion.verificarUsuario(textFieldUsername.getText(), textFieldPassword.getText()))
+			{
+				ventanaUsuario usuario = new ventanaUsuario(aplicacion);
+				usuario.setPrincipal(this);
+				usuario.setVisible(true);
+			}
+			else
+			{
+				JOptionPane.showMessageDialog(this, "Revise sus credenciales");
+			}
 		}
+	}
+	
+	public ConsultorRestaurantes darDirectorio()
+	{
+		return aplicacion;
 	}
 	
 

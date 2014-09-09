@@ -35,6 +35,7 @@ public class ConsultorRestaurantes implements IConsultorRestaurantes
 		categoriasRestaurante = new Categoria[38];
 		listaOrdenadaCategorias = new ListaEncadenadaDoble<Categoria>();
 		listaOrdenadaCocinas = new ListaEncadenadaDoble<Cocina>();
+		registrados = new ListaEncadenadaDoble<Usuario>();
 	}
 
 	@Override

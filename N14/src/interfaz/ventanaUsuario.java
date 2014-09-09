@@ -130,6 +130,8 @@ public class ventanaUsuario extends JFrame implements ListSelectionListener, Act
 	private JFXPanel pane;
 	private JTextField txtGraficoEstado;
 	private JLabel lblEstado_1;
+	private JButton botonEliminarBusqued;
+	private JButton btnEliminarFavorito;
 
 
 	/**
@@ -317,29 +319,46 @@ public class ventanaUsuario extends JFrame implements ListSelectionListener, Act
 		panelCentralGeneral.add(panelBotonesFAV, BorderLayout.EAST);
 		GridBagLayout gbl_panelBotonesFAV = new GridBagLayout();
 		gbl_panelBotonesFAV.columnWidths = new int[]{89, 0};
-		gbl_panelBotonesFAV.rowHeights = new int[]{333, 250, 0};
+		gbl_panelBotonesFAV.rowHeights = new int[]{333, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 250, 0};
 		gbl_panelBotonesFAV.columnWeights = new double[]{0.0, Double.MIN_VALUE};
-		gbl_panelBotonesFAV.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
+		gbl_panelBotonesFAV.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		panelBotonesFAV.setLayout(gbl_panelBotonesFAV);
 		
-		btnNoFavorito = new JButton("UNFAV");
-		btnNoFavorito.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-			}
-		});
+		btnFavorito = new JButton("Favorito");
+		btnFavorito.addActionListener(this);
+		
+		btnNoFavorito = new JButton("No Favorito");
+		btnNoFavorito.addActionListener(this);
+		btnNoFavorito.setActionCommand("nofav");
 		GridBagConstraints gbc_btnNoFavorito = new GridBagConstraints();
 		gbc_btnNoFavorito.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btnNoFavorito.insets = new Insets(0, 0, 5, 0);
 		gbc_btnNoFavorito.gridx = 0;
-		gbc_btnNoFavorito.gridy = 0;
+		gbc_btnNoFavorito.gridy = 1;
 		panelBotonesFAV.add(btnNoFavorito, gbc_btnNoFavorito);
 		
-		btnFavorito = new JButton("FAV");
+		btnEliminarFavorito = new JButton("Eliminar");
+		GridBagConstraints gbc_btnEliminarFavorito = new GridBagConstraints();
+		gbc_btnEliminarFavorito.fill = GridBagConstraints.HORIZONTAL;
+		gbc_btnEliminarFavorito.insets = new Insets(0, 0, 5, 0);
+		gbc_btnEliminarFavorito.gridx = 0;
+		gbc_btnEliminarFavorito.gridy = 2;
+		panelBotonesFAV.add(btnEliminarFavorito, gbc_btnEliminarFavorito);
+		btnFavorito.setActionCommand("fav");
 		GridBagConstraints gbc_btnFavorito = new GridBagConstraints();
+		gbc_btnFavorito.insets = new Insets(0, 0, 5, 0);
 		gbc_btnFavorito.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btnFavorito.gridx = 0;
-		gbc_btnFavorito.gridy = 1;
+		gbc_btnFavorito.gridy = 9;
 		panelBotonesFAV.add(btnFavorito, gbc_btnFavorito);
+		
+		botonEliminarBusqued = new JButton("Eliminar");
+		GridBagConstraints gbc_botonEliminarBusqued = new GridBagConstraints();
+		gbc_botonEliminarBusqued.insets = new Insets(0, 0, 5, 0);
+		gbc_botonEliminarBusqued.fill = GridBagConstraints.HORIZONTAL;
+		gbc_botonEliminarBusqued.gridx = 0;
+		gbc_botonEliminarBusqued.gridy = 10;
+		panelBotonesFAV.add(botonEliminarBusqued, gbc_botonEliminarBusqued);
 		
 		panelCentral = new JPanel();
 		panelCentralGeneral.add(panelCentral, BorderLayout.CENTER);
@@ -637,7 +656,7 @@ public class ventanaUsuario extends JFrame implements ListSelectionListener, Act
 		
 		pane = new JFXPanel();
 		JScrollPane scrool = new JScrollPane();
-		scrool.setViewportView(pane);
+		//scrool.setViewportView(pane);
 		panelMapa.setLayout(new BorderLayout());
 		panelMapa.add(scrool, BorderLayout.CENTER);
 	}
@@ -765,7 +784,13 @@ public class ventanaUsuario extends JFrame implements ListSelectionListener, Act
 			}
 			else if(listaFiltrar==2)
 			{
-				if(textoBusquedaNombre.getText().equals("")||textoBusquedaEstado.getText().equals("")||textoBusquedaCiudad.getText().equals(""))
+				
+				if(textoBusquedaNombre.getText().equals("")&&textoBusquedaEstado.getText().equals("")==false&&textoBusquedaCiudad.getText().equals("")==false)
+				{
+					Restaurante[] restaurantes = consultorAct.crearArregloPorLocacion(textoBusquedaEstado.getText(), textoBusquedaCiudad.getText());
+					refrescarListaBusqueda(restaurantes);
+				}
+				else if(textoBusquedaNombre.getText().equals("")||textoBusquedaEstado.getText().equals("")||textoBusquedaCiudad.getText().equals(""))
 				{
 					try {
 						throw new Exception("Debe llenar todos los campos de busqueda.");
@@ -779,6 +804,14 @@ public class ventanaUsuario extends JFrame implements ListSelectionListener, Act
 					Restaurante[] restaurantes = consultorAct.crearArregloPorId(textoBusquedaNombre.getText()+"-"+textoBusquedaCiudad.getText()+"-"+textoBusquedaEstado.getText());
 					refrescarListaBusqueda(restaurantes);
 				}
+			}
+		}
+		else if(comando.equals(btnFavorito.getActionCommand()))
+		{
+			if(listaBusqueda.getSelectedValue()!=null)
+			{
+				consultorAct.darUsuarioActual().agregarFavorito((Restaurante) listaBusqueda.getSelectedValue());
+				refrescarListaFavoritos(consultorAct.darUsuarioActual().mostrarTodosFavoritos());
 			}
 		}
 	}

@@ -3,6 +3,8 @@ package mundo;
 import java.awt.Container;
 import java.awt.Dialog.ModalExclusionType;
 
+import javax.swing.JFrame;
+
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -15,12 +17,14 @@ import estructuraDatos.IListaEncadenadaDoble;
 
 
 
-public class creadorGraficoPie extends ApplicationFrame
+public class creadorGraficoPie extends JFrame
 {
 	private String titulo;
 
-	public creadorGraficoPie(String title, IListaEncadenadaDoble<Categoria> lista) {
+	public creadorGraficoPie(String title, IListaEncadenadaDoble<Categoria> lista)
+	{
 		super(title);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		titulo = title;
 		setSize(400, 400);
 		this.setContentPane(new ChartPanel(crearGrafica(crearDatos(lista))));
@@ -51,6 +55,7 @@ public class creadorGraficoPie extends ApplicationFrame
 		grafica.setLabelGap(0.02);
 		return pie;
 	}
+
 
 
 

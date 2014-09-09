@@ -91,4 +91,18 @@ public class Usuario extends Persona
 		return resp;
 	}
 
+	public Restaurante[]  mostrarTodosFavoritos()
+	{
+		Restaurante[] resp = new Restaurante[listaFavoritos.darTamano()];
+		Restaurante ini = listaFavoritos.volverActualPrimero();
+		int indice = 0;
+		while(ini!=null)
+		{
+			resp[indice] = ini;
+			indice++;
+			ini = listaFavoritos.adelantarse();
+		}
+		return resp;
+	}
+
 }

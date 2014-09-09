@@ -1,5 +1,7 @@
 package mundo;
 
+import javax.swing.JFrame;
+
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -13,7 +15,7 @@ import org.jfree.ui.ApplicationFrame;
 
 import estructuraDatos.IListaEncadenadaDoble;
 
-public class creadorGraficoBarras extends ApplicationFrame
+public class creadorGraficoBarras extends JFrame
 {
 	private String titulo;
 	private String est;
@@ -23,6 +25,7 @@ public class creadorGraficoBarras extends ApplicationFrame
 		titulo = title;
 		est = estado;
 		setSize(400, 400);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setContentPane(new ChartPanel(crearGrafica(crearDatos(lista))));
 		// TODO Auto-generated constructor stub
 	}
@@ -48,6 +51,11 @@ public class creadorGraficoBarras extends ApplicationFrame
 	{
 		JFreeChart pie = ChartFactory.createBarChart3D(titulo, "Tipos de Cocina", "Cantidad", datos, PlotOrientation.VERTICAL, true, true, false);
 		return pie;
+	}
+	
+	public void dispose()
+	{
+		this.dispose();
 	}
 
 }
