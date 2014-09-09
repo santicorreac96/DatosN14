@@ -23,7 +23,7 @@ public class creadorGraficoPie extends ApplicationFrame
 		super(title);
 		titulo = title;
 		setSize(400, 400);
-		setContentPane(new ChartPanel(crearGrafica(crearDatos(lista))));
+		this.setContentPane(new ChartPanel(crearGrafica(crearDatos(lista))));
 		// TODO Auto-generated constructor stub
 	}
 
@@ -33,7 +33,7 @@ public class creadorGraficoPie extends ApplicationFrame
 		DefaultPieDataset datos = new DefaultPieDataset();
 		Categoria ini = lista.volverActualPrimero();
 		int agregados = 0;
-		while(agregados<8)
+		while(agregados<6)
 		{
 			datos.setValue(ini.getNombre(),ini.getCantidad());
 			agregados++;
@@ -51,6 +51,7 @@ public class creadorGraficoPie extends ApplicationFrame
 		grafica.setLabelGap(0.02);
 		return pie;
 	}
+
 
 
 

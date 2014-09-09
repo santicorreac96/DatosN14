@@ -53,6 +53,7 @@ import javax.swing.event.ListSelectionListener;
 import mundo.ConsultorRestaurantes;
 import mundo.Mapa;
 import mundo.Restaurante;
+import mundo.creadorGraficoBarras;
 import mundo.creadorGraficoPie;
 
 import java.awt.Color;
@@ -111,18 +112,8 @@ public class ventanaUsuario extends JFrame implements ListSelectionListener, Act
 	private JLabel lblTipoCocina;
 	private JTextField textoBusquedaCocina;
 	private JButton botonBusqueda;
-	private JScrollPane scrollPane;
-	private JScrollPane scrollPane_1;
-	private JScrollPane scrollPane_2;
-	private JScrollPane scrollPane_3;
-	private JScrollPane scrollPane_4;
-	private JScrollPane scrollPane_5;
-	private JScrollPane scrollPane_6;
-	private JScrollPane scrollPane_7;
 	private JLabel lblPaginaWeb;
 	private JLabel lblCodigoPostal;
-	private JScrollPane scrollPane_8;
-	private JScrollPane scrollPane_9;
 	private JTextField txtNombre;
 	private JTextField txtCocina;
 	private JTextField txtCiudad;
@@ -137,6 +128,8 @@ public class ventanaUsuario extends JFrame implements ListSelectionListener, Act
 	private Restaurante visualizado;
 	private int listaFiltrar;
 	private JFXPanel pane;
+	private JTextField txtGraficoEstado;
+	private JLabel lblEstado_1;
 
 
 	/**
@@ -374,16 +367,15 @@ public class ventanaUsuario extends JFrame implements ListSelectionListener, Act
 		panelCentral.add(panelBotonesGraficas, BorderLayout.WEST);
 		GridBagLayout gbl_panelBotonesGraficas = new GridBagLayout();
 		gbl_panelBotonesGraficas.columnWidths = new int[]{89, 0};
-		gbl_panelBotonesGraficas.rowHeights = new int[]{211, 257, 0};
-		gbl_panelBotonesGraficas.columnWeights = new double[]{0.0, Double.MIN_VALUE};
-		gbl_panelBotonesGraficas.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
+		gbl_panelBotonesGraficas.rowHeights = new int[]{211, 174, 0, 38, 0};
+		gbl_panelBotonesGraficas.columnWeights = new double[]{1.0, Double.MIN_VALUE};
+		gbl_panelBotonesGraficas.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		panelBotonesGraficas.setLayout(gbl_panelBotonesGraficas);
 		
 		btnGráficaCategorias = new JButton("Gr\u00E1fica categor\u00EDas");
 		btnGráficaCategorias.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				JDialog dialogo = new JDialog(principal);
-				new creadorGraficoPie("Categorias Ranking", consultorAct.darCategorias()).setVisible(true);;
+				new creadorGraficoPie("6 Categorías mas comunes", consultorAct.darCategorias()).setVisible(true);
 			}
 		});
 		GridBagConstraints gbc_btnGráficaCategorias = new GridBagConstraints();
@@ -393,19 +385,54 @@ public class ventanaUsuario extends JFrame implements ListSelectionListener, Act
 		panelBotonesGraficas.add(btnGráficaCategorias, gbc_btnGráficaCategorias);
 		
 		btnGraficaTipos = new JButton("Gr\u00E1fica tipos");
+		btnGraficaTipos.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+					
+					if(txtGraficoEstado.getText().equals(""))
+					{
+						try {
+							throw new Exception("Debe escribir un estado");
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							JOptionPane.showMessageDialog(principal,e.getMessage());
+						}
+					}
+					else
+					{
+						new creadorGraficoBarras("8 tipos de cocina más comunes en: "+ txtGraficoEstado.getText()  , consultorAct.darCocinas(),txtGraficoEstado.getText()).setVisible(true);
+					}
+					
+			}
+		});
 		GridBagConstraints gbc_btnGraficaTipos = new GridBagConstraints();
+		gbc_btnGraficaTipos.insets = new Insets(0, 0, 5, 0);
 		gbc_btnGraficaTipos.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btnGraficaTipos.gridx = 0;
 		gbc_btnGraficaTipos.gridy = 1;
 		panelBotonesGraficas.add(btnGraficaTipos, gbc_btnGraficaTipos);
 		
+		lblEstado_1 = new JLabel("Estado");
+		GridBagConstraints gbc_lblEstado_1 = new GridBagConstraints();
+		gbc_lblEstado_1.insets = new Insets(0, 0, 5, 0);
+		gbc_lblEstado_1.gridx = 0;
+		gbc_lblEstado_1.gridy = 2;
+		panelBotonesGraficas.add(lblEstado_1, gbc_lblEstado_1);
+		
+		txtGraficoEstado = new JTextField();
+		GridBagConstraints gbc_txtGraficoEstado = new GridBagConstraints();
+		gbc_txtGraficoEstado.fill = GridBagConstraints.HORIZONTAL;
+		gbc_txtGraficoEstado.gridx = 0;
+		gbc_txtGraficoEstado.gridy = 3;
+		panelBotonesGraficas.add(txtGraficoEstado, gbc_txtGraficoEstado);
+		txtGraficoEstado.setColumns(10);
+		
 		panelInfo = new JPanel();
 		panelInfo.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Información Restaurante", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panelCentral.add(panelInfo, BorderLayout.CENTER);
 		GridBagLayout gbl_panelInfo = new GridBagLayout();
-		gbl_panelInfo.columnWidths = new int[]{0, 131, 133, 0, 124, 127, 0};
+		gbl_panelInfo.columnWidths = new int[]{131, 133, 124, 127, 0};
 		gbl_panelInfo.rowHeights = new int[]{47, 45, 46, 31, 46, 300, 0};
-		gbl_panelInfo.columnWeights = new double[]{0.0, 1.0, 1.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
+		gbl_panelInfo.columnWeights = new double[]{1.0, 1.0, 0.0, 1.0, Double.MIN_VALUE};
 		gbl_panelInfo.rowWeights = new double[]{1.0, 1.0, 1.0, 0.0, 1.0, 1.0, Double.MIN_VALUE};
 		panelInfo.setLayout(gbl_panelInfo);
 		
@@ -413,209 +440,189 @@ public class ventanaUsuario extends JFrame implements ListSelectionListener, Act
 		GridBagConstraints gbc_labelNombre = new GridBagConstraints();
 		gbc_labelNombre.anchor = GridBagConstraints.EAST;
 		gbc_labelNombre.insets = new Insets(0, 0, 5, 5);
-		gbc_labelNombre.gridx = 1;
+		gbc_labelNombre.gridx = 0;
 		gbc_labelNombre.gridy = 0;
 		panelInfo.add(labelNombre, gbc_labelNombre);
 		
-		scrollPane = new JScrollPane();
-		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
-		gbc_scrollPane.insets = new Insets(0, 0, 5, 5);
-		gbc_scrollPane.fill = GridBagConstraints.BOTH;
-		gbc_scrollPane.gridx = 2;
-		gbc_scrollPane.gridy = 0;
-		panelInfo.add(scrollPane, gbc_scrollPane);
-		
 		txtNombre = new JTextField();
-		scrollPane.setViewportView(txtNombre);
+		GridBagConstraints gbc_txtNombre = new GridBagConstraints();
+		gbc_txtNombre.fill = GridBagConstraints.HORIZONTAL;
+		gbc_txtNombre.insets = new Insets(0, 0, 5, 5);
+		gbc_txtNombre.gridx = 1;
+		gbc_txtNombre.gridy = 0;
+		panelInfo.add(txtNombre, gbc_txtNombre);
 		txtNombre.setColumns(10);
+		
+		txtNombre.setEditable(false);
 		
 		labCocina = new Label("Cocina:");
 		GridBagConstraints gbc_labCocina = new GridBagConstraints();
 		gbc_labCocina.anchor = GridBagConstraints.EAST;
 		gbc_labCocina.insets = new Insets(0, 0, 5, 5);
-		gbc_labCocina.gridx = 4;
+		gbc_labCocina.gridx = 2;
 		gbc_labCocina.gridy = 0;
 		panelInfo.add(labCocina, gbc_labCocina);
 		
-		scrollPane_2 = new JScrollPane();
-		GridBagConstraints gbc_scrollPane_2 = new GridBagConstraints();
-		gbc_scrollPane_2.insets = new Insets(0, 0, 5, 0);
-		gbc_scrollPane_2.fill = GridBagConstraints.BOTH;
-		gbc_scrollPane_2.gridx = 5;
-		gbc_scrollPane_2.gridy = 0;
-		panelInfo.add(scrollPane_2, gbc_scrollPane_2);
-		
 		txtCocina = new JTextField();
-		scrollPane_2.setViewportView(txtCocina);
+		GridBagConstraints gbc_txtCocina = new GridBagConstraints();
+		gbc_txtCocina.fill = GridBagConstraints.HORIZONTAL;
+		gbc_txtCocina.insets = new Insets(0, 0, 5, 0);
+		gbc_txtCocina.gridx = 3;
+		gbc_txtCocina.gridy = 0;
+		panelInfo.add(txtCocina, gbc_txtCocina);
 		txtCocina.setColumns(10);
+		txtCocina.setEditable(false);
 		
 		labelCiudad = new Label("Ciudad:");
 		GridBagConstraints gbc_labelCiudad = new GridBagConstraints();
 		gbc_labelCiudad.anchor = GridBagConstraints.EAST;
 		gbc_labelCiudad.insets = new Insets(0, 0, 5, 5);
-		gbc_labelCiudad.gridx = 1;
+		gbc_labelCiudad.gridx = 0;
 		gbc_labelCiudad.gridy = 1;
 		panelInfo.add(labelCiudad, gbc_labelCiudad);
 		
-		scrollPane_1 = new JScrollPane();
-		GridBagConstraints gbc_scrollPane_1 = new GridBagConstraints();
-		gbc_scrollPane_1.insets = new Insets(0, 0, 5, 5);
-		gbc_scrollPane_1.fill = GridBagConstraints.BOTH;
-		gbc_scrollPane_1.gridx = 2;
-		gbc_scrollPane_1.gridy = 1;
-		panelInfo.add(scrollPane_1, gbc_scrollPane_1);
-		
 		txtCiudad = new JTextField();
-		scrollPane_1.setViewportView(txtCiudad);
+		GridBagConstraints gbc_txtCiudad = new GridBagConstraints();
+		gbc_txtCiudad.fill = GridBagConstraints.HORIZONTAL;
+		gbc_txtCiudad.insets = new Insets(0, 0, 5, 5);
+		gbc_txtCiudad.gridx = 1;
+		gbc_txtCiudad.gridy = 1;
+		panelInfo.add(txtCiudad, gbc_txtCiudad);
 		txtCiudad.setColumns(10);
+		txtCiudad.setEditable(false);
 		
 		labCategoria = new Label("Categor\u00EDa:");
 		GridBagConstraints gbc_labCategoria = new GridBagConstraints();
 		gbc_labCategoria.anchor = GridBagConstraints.EAST;
 		gbc_labCategoria.insets = new Insets(0, 0, 5, 5);
-		gbc_labCategoria.gridx = 4;
+		gbc_labCategoria.gridx = 2;
 		gbc_labCategoria.gridy = 1;
 		panelInfo.add(labCategoria, gbc_labCategoria);
 		
-		scrollPane_3 = new JScrollPane();
-		GridBagConstraints gbc_scrollPane_3 = new GridBagConstraints();
-		gbc_scrollPane_3.insets = new Insets(0, 0, 5, 0);
-		gbc_scrollPane_3.fill = GridBagConstraints.BOTH;
-		gbc_scrollPane_3.gridx = 5;
-		gbc_scrollPane_3.gridy = 1;
-		panelInfo.add(scrollPane_3, gbc_scrollPane_3);
-		
 		txtCategoria = new JTextField();
-		scrollPane_3.setViewportView(txtCategoria);
+		GridBagConstraints gbc_txtCategoria = new GridBagConstraints();
+		gbc_txtCategoria.fill = GridBagConstraints.HORIZONTAL;
+		gbc_txtCategoria.insets = new Insets(0, 0, 5, 0);
+		gbc_txtCategoria.gridx = 3;
+		gbc_txtCategoria.gridy = 1;
+		panelInfo.add(txtCategoria, gbc_txtCategoria);
 		txtCategoria.setColumns(10);
+		txtCategoria.setEditable(false);
 		
 		labelEstado = new Label("Estado:");
 		GridBagConstraints gbc_labelEstado = new GridBagConstraints();
 		gbc_labelEstado.anchor = GridBagConstraints.EAST;
 		gbc_labelEstado.insets = new Insets(0, 0, 5, 5);
-		gbc_labelEstado.gridx = 1;
+		gbc_labelEstado.gridx = 0;
 		gbc_labelEstado.gridy = 2;
 		panelInfo.add(labelEstado, gbc_labelEstado);
 		
-		scrollPane_4 = new JScrollPane();
-		GridBagConstraints gbc_scrollPane_4 = new GridBagConstraints();
-		gbc_scrollPane_4.insets = new Insets(0, 0, 5, 5);
-		gbc_scrollPane_4.fill = GridBagConstraints.BOTH;
-		gbc_scrollPane_4.gridx = 2;
-		gbc_scrollPane_4.gridy = 2;
-		panelInfo.add(scrollPane_4, gbc_scrollPane_4);
-		
 		txtEstado = new JTextField();
-		scrollPane_4.setViewportView(txtEstado);
+		GridBagConstraints gbc_txtEstado = new GridBagConstraints();
+		gbc_txtEstado.fill = GridBagConstraints.HORIZONTAL;
+		gbc_txtEstado.insets = new Insets(0, 0, 5, 5);
+		gbc_txtEstado.gridx = 1;
+		gbc_txtEstado.gridy = 2;
+		panelInfo.add(txtEstado, gbc_txtEstado);
 		txtEstado.setColumns(10);
+		txtEstado.setEditable(false);
 		
 		labTelefono = new Label("Tel\u00E9fono:");
 		GridBagConstraints gbc_labTelefono = new GridBagConstraints();
 		gbc_labTelefono.anchor = GridBagConstraints.EAST;
 		gbc_labTelefono.insets = new Insets(0, 0, 5, 5);
-		gbc_labTelefono.gridx = 4;
+		gbc_labTelefono.gridx = 2;
 		gbc_labTelefono.gridy = 2;
 		panelInfo.add(labTelefono, gbc_labTelefono);
 		
-		scrollPane_5 = new JScrollPane();
-		GridBagConstraints gbc_scrollPane_5 = new GridBagConstraints();
-		gbc_scrollPane_5.insets = new Insets(0, 0, 5, 0);
-		gbc_scrollPane_5.fill = GridBagConstraints.BOTH;
-		gbc_scrollPane_5.gridx = 5;
-		gbc_scrollPane_5.gridy = 2;
-		panelInfo.add(scrollPane_5, gbc_scrollPane_5);
-		
 		txtTelefono = new JTextField();
-		scrollPane_5.setViewportView(txtTelefono);
+		GridBagConstraints gbc_txtTelefono = new GridBagConstraints();
+		gbc_txtTelefono.fill = GridBagConstraints.HORIZONTAL;
+		gbc_txtTelefono.insets = new Insets(0, 0, 5, 0);
+		gbc_txtTelefono.gridx = 3;
+		gbc_txtTelefono.gridy = 2;
+		panelInfo.add(txtTelefono, gbc_txtTelefono);
 		txtTelefono.setColumns(10);
+		txtTelefono.setEditable(false);
 		
 		labDireccion = new Label("Direcci\u00F3n:");
 		GridBagConstraints gbc_labDireccion = new GridBagConstraints();
 		gbc_labDireccion.anchor = GridBagConstraints.EAST;
 		gbc_labDireccion.insets = new Insets(0, 0, 5, 5);
-		gbc_labDireccion.gridx = 1;
+		gbc_labDireccion.gridx = 0;
 		gbc_labDireccion.gridy = 3;
 		panelInfo.add(labDireccion, gbc_labDireccion);
 		
-		scrollPane_6 = new JScrollPane();
-		GridBagConstraints gbc_scrollPane_6 = new GridBagConstraints();
-		gbc_scrollPane_6.insets = new Insets(0, 0, 5, 5);
-		gbc_scrollPane_6.fill = GridBagConstraints.BOTH;
-		gbc_scrollPane_6.gridx = 2;
-		gbc_scrollPane_6.gridy = 3;
-		panelInfo.add(scrollPane_6, gbc_scrollPane_6);
-		
 		txtDireccion = new JTextField();
-		scrollPane_6.setViewportView(txtDireccion);
+		GridBagConstraints gbc_txtDireccion = new GridBagConstraints();
+		gbc_txtDireccion.fill = GridBagConstraints.HORIZONTAL;
+		gbc_txtDireccion.insets = new Insets(0, 0, 5, 5);
+		gbc_txtDireccion.gridx = 1;
+		gbc_txtDireccion.gridy = 3;
+		panelInfo.add(txtDireccion, gbc_txtDireccion);
 		txtDireccion.setColumns(10);
+		txtDireccion.setEditable(false);
 		
 		labHorario = new Label("Horario:");
 		GridBagConstraints gbc_labHorario = new GridBagConstraints();
 		gbc_labHorario.anchor = GridBagConstraints.EAST;
 		gbc_labHorario.insets = new Insets(0, 0, 5, 5);
-		gbc_labHorario.gridx = 4;
+		gbc_labHorario.gridx = 2;
 		gbc_labHorario.gridy = 3;
 		panelInfo.add(labHorario, gbc_labHorario);
 		
-		scrollPane_7 = new JScrollPane();
-		GridBagConstraints gbc_scrollPane_7 = new GridBagConstraints();
-		gbc_scrollPane_7.insets = new Insets(0, 0, 5, 0);
-		gbc_scrollPane_7.fill = GridBagConstraints.BOTH;
-		gbc_scrollPane_7.gridx = 5;
-		gbc_scrollPane_7.gridy = 3;
-		panelInfo.add(scrollPane_7, gbc_scrollPane_7);
-		
 		txtHorario = new JTextField();
-		scrollPane_7.setViewportView(txtHorario);
+		GridBagConstraints gbc_txtHorario = new GridBagConstraints();
+		gbc_txtHorario.fill = GridBagConstraints.HORIZONTAL;
+		gbc_txtHorario.insets = new Insets(0, 0, 5, 0);
+		gbc_txtHorario.gridx = 3;
+		gbc_txtHorario.gridy = 3;
+		panelInfo.add(txtHorario, gbc_txtHorario);
 		txtHorario.setColumns(10);
+		txtHorario.setEditable(false);
 		
 		lblPaginaWeb = new JLabel("Pagina Web:  ");
 		lblPaginaWeb.setHorizontalAlignment(SwingConstants.LEFT);
 		GridBagConstraints gbc_lblPaginaWeb = new GridBagConstraints();
 		gbc_lblPaginaWeb.anchor = GridBagConstraints.EAST;
 		gbc_lblPaginaWeb.insets = new Insets(0, 0, 5, 5);
-		gbc_lblPaginaWeb.gridx = 1;
+		gbc_lblPaginaWeb.gridx = 0;
 		gbc_lblPaginaWeb.gridy = 4;
 		panelInfo.add(lblPaginaWeb, gbc_lblPaginaWeb);
 		
-		scrollPane_8 = new JScrollPane();
-		GridBagConstraints gbc_scrollPane_8 = new GridBagConstraints();
-		gbc_scrollPane_8.insets = new Insets(0, 0, 5, 5);
-		gbc_scrollPane_8.fill = GridBagConstraints.BOTH;
-		gbc_scrollPane_8.gridx = 2;
-		gbc_scrollPane_8.gridy = 4;
-		panelInfo.add(scrollPane_8, gbc_scrollPane_8);
-		
 		txtWeb = new JTextField();
-		scrollPane_8.setViewportView(txtWeb);
+		GridBagConstraints gbc_txtWeb = new GridBagConstraints();
+		gbc_txtWeb.fill = GridBagConstraints.HORIZONTAL;
+		gbc_txtWeb.insets = new Insets(0, 0, 5, 5);
+		gbc_txtWeb.gridx = 1;
+		gbc_txtWeb.gridy = 4;
+		panelInfo.add(txtWeb, gbc_txtWeb);
 		txtWeb.setColumns(10);
+		txtWeb.setEditable(false);
 		
 		lblCodigoPostal = new JLabel("Codigo Postal:  ");
 		GridBagConstraints gbc_lblCodigoPostal = new GridBagConstraints();
 		gbc_lblCodigoPostal.anchor = GridBagConstraints.EAST;
 		gbc_lblCodigoPostal.insets = new Insets(0, 0, 5, 5);
-		gbc_lblCodigoPostal.gridx = 4;
+		gbc_lblCodigoPostal.gridx = 2;
 		gbc_lblCodigoPostal.gridy = 4;
 		panelInfo.add(lblCodigoPostal, gbc_lblCodigoPostal);
 		
-		scrollPane_9 = new JScrollPane();
-		GridBagConstraints gbc_scrollPane_9 = new GridBagConstraints();
-		gbc_scrollPane_9.insets = new Insets(0, 0, 5, 0);
-		gbc_scrollPane_9.fill = GridBagConstraints.BOTH;
-		gbc_scrollPane_9.gridx = 5;
-		gbc_scrollPane_9.gridy = 4;
-		panelInfo.add(scrollPane_9, gbc_scrollPane_9);
-		
 		txtCodigoPostal = new JTextField();
-		scrollPane_9.setViewportView(txtCodigoPostal);
+		GridBagConstraints gbc_txtCodigoPostal = new GridBagConstraints();
+		gbc_txtCodigoPostal.fill = GridBagConstraints.HORIZONTAL;
+		gbc_txtCodigoPostal.insets = new Insets(0, 0, 5, 0);
+		gbc_txtCodigoPostal.gridx = 3;
+		gbc_txtCodigoPostal.gridy = 4;
+		panelInfo.add(txtCodigoPostal, gbc_txtCodigoPostal);
 		txtCodigoPostal.setColumns(10);
+		txtCodigoPostal.setEditable(false);
 		
 		panelMapa = new JPanel();
 		GridBagConstraints gbc_panelMapa = new GridBagConstraints();
-		gbc_panelMapa.gridwidth = 5;
-		gbc_panelMapa.insets = new Insets(0, 0, 0, 5);
+		gbc_panelMapa.gridwidth = 4;
 		gbc_panelMapa.fill = GridBagConstraints.BOTH;
-		gbc_panelMapa.gridx = 1;
+		gbc_panelMapa.gridx = 0;
 		gbc_panelMapa.gridy = 5;
 		panelInfo.add(panelMapa, gbc_panelMapa);
 		
@@ -628,20 +635,9 @@ public class ventanaUsuario extends JFrame implements ListSelectionListener, Act
 		textoBusquedaNombre.setEditable(true);
 		textoBusquedaCiudad.setEditable(true);
 		
-		txtNombre.setEditable(false);
-		txtTelefono.setEditable(false);
-		txtCategoria.setEditable(false);
-		txtCocina.setEditable(false);
-		txtCiudad.setEditable(false);
-		txtCodigoPostal.setEditable(false);
-		txtDireccion.setEditable(false);
-		txtEstado.setEditable(false);
-		txtHorario.setEditable(false);
-		txtWeb.setEditable(false);
-		
 		pane = new JFXPanel();
 		JScrollPane scrool = new JScrollPane();
-		//scrool.setViewportView(pane);
+		scrool.setViewportView(pane);
 		panelMapa.setLayout(new BorderLayout());
 		panelMapa.add(scrool, BorderLayout.CENTER);
 	}

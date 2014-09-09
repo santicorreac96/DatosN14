@@ -12,7 +12,7 @@ import jxl.Workbook;
 
 public class ConsultorRestaurantes implements IConsultorRestaurantes
 {
-	
+
 	public static final Object CONTRASENA_ADMIN = "RESTAU-ADMIN";
 	private ITablaHash<Restaurante, String> tablaIdentifcadorCompuesto;
 	private ITablaHash<Restaurante, String> tablaLocalidadEstado;
@@ -23,7 +23,8 @@ public class ConsultorRestaurantes implements IConsultorRestaurantes
 	private Cocina[] cocinasRestaurante;
 	private Usuario usuarioRegistradoActual; 
 	private IListaEncadenadaDoble<Categoria> listaOrdenadaCategorias;
-	
+	private IListaEncadenadaDoble<Cocina> listaOrdenadaCocinas;
+
 	public ConsultorRestaurantes()
 	{
 		tablaIdentifcadorCompuesto  = new TablaHash<Restaurante, String>();
@@ -33,6 +34,7 @@ public class ConsultorRestaurantes implements IConsultorRestaurantes
 		cocinasRestaurante = new Cocina[2310];
 		categoriasRestaurante = new Categoria[38];
 		listaOrdenadaCategorias = new ListaEncadenadaDoble<Categoria>();
+		listaOrdenadaCocinas = new ListaEncadenadaDoble<Cocina>();
 	}
 
 	@Override
@@ -202,8 +204,9 @@ public class ConsultorRestaurantes implements IConsultorRestaurantes
 					if(act.getNombre().equals(coc)&& act.getEstado().equals(ini.getEstado()))
 					{
 						act.bajarCantidad();
-						
+						listaOrdenadaCocinas.eliminar(act, new comparadorCocinaNombre());
 						borro = true;
+						listaOrdenadaCocinas.adicionar(act, new comparadorCocinaCantidad());
 					}
 				}
 			}
@@ -297,13 +300,21 @@ public class ConsultorRestaurantes implements IConsultorRestaurantes
 						{
 							if(actual.getNombre().equals(categoria) && actual.getEstado().equals(estado) )
 							{
+								try {
+									listaOrdenadaCocinas.eliminar(actual, new comparadorCocinaNombre());
+								} catch (Exception e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
 								actual.setCantidad();
 								teermino = true;
+								listaOrdenadaCocinas.adicionar(actual, new comparadorCocinaCantidad());
 							}
 						}
 						else
 						{
 							cocinasRestaurante[i] =  new Cocina(1, categoria,estado);
+							listaOrdenadaCocinas.adicionar(cocinasRestaurante[i] , new comparadorCocinaCantidad());
 							teermino = true;
 						}
 					}
@@ -320,9 +331,9 @@ public class ConsultorRestaurantes implements IConsultorRestaurantes
 			return listaOrdenadaCategorias;
 		}
 		
-		public Cocina[] darCocinas()
+		public IListaEncadenadaDoble<Cocina> darCocinas()
 		{
-			return cocinasRestaurante;
+			return listaOrdenadaCocinas;
 		}
 		
 		public Restaurante[] crearArregloPorLocacion(String estado, String ciudad)
