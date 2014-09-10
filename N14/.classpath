@@ -20,5 +20,6 @@
 	<classpathentry kind="lib" path="librerias/jfreechart-1.0.19-experimental.jar"/>
 	<classpathentry kind="lib" path="librerias/jfreechart-1.0.19-swt.jar"/>
 	<classpathentry kind="lib" path="librerias/jcommon-1.0.23.jar"/>
+	<classpathentry kind="lib" path="librerias/jflow.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
