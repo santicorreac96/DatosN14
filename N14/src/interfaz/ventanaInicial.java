@@ -72,6 +72,7 @@ public class ventanaInicial extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
 					ventanaInicial frame = new ventanaInicial();
 					frame.setVisible(true);
 				} catch (Exception e) {
@@ -96,7 +97,7 @@ public class ventanaInicial extends JFrame {
 
 		setTitle("RestauApp");
 		setResizable(false);
-		setSize(new Dimension(300, 300));
+		setSize(new Dimension(350, 300));
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		panelPrincipal = new JPanel();
 		panelPrincipal.setSize(new Dimension(300, 150));
