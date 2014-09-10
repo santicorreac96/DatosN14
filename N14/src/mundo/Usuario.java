@@ -73,7 +73,7 @@ public class Usuario extends Persona implements Serializable
 		Restaurante ini = listaFavoritos.volverActualPrimero();
 		while( ini != null)
 		{
-			if(ini.getCocina().equals(cocina)&& ini.getCiudad().equals(localidad))
+			if(ini.getCocina().contains(cocina)&& ini.getEstado().equals(localidad))
 			{
 				resp.adicionar(ini, new comparadorID());
 			}

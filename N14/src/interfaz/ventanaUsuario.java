@@ -138,7 +138,7 @@ public class ventanaUsuario extends JFrame implements ListSelectionListener, Act
 	 */
 	public ventanaUsuario(ConsultorRestaurantes cons) {
 		consultorAct=cons;
-		setSize(new Dimension(1000, 720));
+		setSize(new Dimension(1000, 900));
 		setResizable(false);
 		setTitle("Catalogo del Usuario:" + consultorAct.darUsuarioActual().darNombre());
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -180,6 +180,7 @@ public class ventanaUsuario extends JFrame implements ListSelectionListener, Act
 		panelBusquedas.add(lblEstado, gbc_lblEstado);
 		
 		radioListaNormal = new JRadioButton("Lista Busqueda");
+		radioListaNormal.setSelected(true);
 		radioListaNormal.addActionListener(this);
 		GridBagConstraints gbc_radioListaNormal = new GridBagConstraints();
 		gbc_radioListaNormal.insets = new Insets(0, 0, 5, 5);
@@ -318,9 +319,9 @@ public class ventanaUsuario extends JFrame implements ListSelectionListener, Act
 		panelCentralGeneral.add(panelBotonesFAV, BorderLayout.EAST);
 		GridBagLayout gbl_panelBotonesFAV = new GridBagLayout();
 		gbl_panelBotonesFAV.columnWidths = new int[]{89, 0};
-		gbl_panelBotonesFAV.rowHeights = new int[]{333, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 250, 0};
+		gbl_panelBotonesFAV.rowHeights = new int[]{0, 0, 333, 333, 333, 35, 333, 0, 0, 0, 0, 0, 0, 0, 0, 0, 250, 0};
 		gbl_panelBotonesFAV.columnWeights = new double[]{0.0, Double.MIN_VALUE};
-		gbl_panelBotonesFAV.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_panelBotonesFAV.rowWeights = new double[]{0.0, 0.0, 1.0, 1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		panelBotonesFAV.setLayout(gbl_panelBotonesFAV);
 		
 		btnFavorito = new JButton("Favorito");
@@ -333,14 +334,14 @@ public class ventanaUsuario extends JFrame implements ListSelectionListener, Act
 		gbc_btnNoFavorito.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btnNoFavorito.insets = new Insets(0, 0, 5, 0);
 		gbc_btnNoFavorito.gridx = 0;
-		gbc_btnNoFavorito.gridy = 1;
+		gbc_btnNoFavorito.gridy = 5;
 		panelBotonesFAV.add(btnNoFavorito, gbc_btnNoFavorito);
 		btnFavorito.setActionCommand("fav");
 		GridBagConstraints gbc_btnFavorito = new GridBagConstraints();
 		gbc_btnFavorito.insets = new Insets(0, 0, 5, 0);
 		gbc_btnFavorito.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btnFavorito.gridx = 0;
-		gbc_btnFavorito.gridy = 9;
+		gbc_btnFavorito.gridy = 14;
 		panelBotonesFAV.add(btnFavorito, gbc_btnFavorito);
 		
 		botonEliminarBusqued = new JButton("Eliminar");
@@ -350,7 +351,7 @@ public class ventanaUsuario extends JFrame implements ListSelectionListener, Act
 		gbc_botonEliminarBusqued.insets = new Insets(0, 0, 5, 0);
 		gbc_botonEliminarBusqued.fill = GridBagConstraints.HORIZONTAL;
 		gbc_botonEliminarBusqued.gridx = 0;
-		gbc_botonEliminarBusqued.gridy = 10;
+		gbc_botonEliminarBusqued.gridy = 15;
 		panelBotonesFAV.add(botonEliminarBusqued, gbc_botonEliminarBusqued);
 		
 		panelCentral = new JPanel();
@@ -423,7 +424,7 @@ public class ventanaUsuario extends JFrame implements ListSelectionListener, Act
 		gbc_btnGraficaTipos.gridy = 1;
 		panelBotonesGraficas.add(btnGraficaTipos, gbc_btnGraficaTipos);
 		
-		lblEstado_1 = new JLabel("Estado");
+		lblEstado_1 = new JLabel("Estado A Analizar");
 		GridBagConstraints gbc_lblEstado_1 = new GridBagConstraints();
 		gbc_lblEstado_1.insets = new Insets(0, 0, 5, 0);
 		gbc_lblEstado_1.gridx = 0;
@@ -443,7 +444,7 @@ public class ventanaUsuario extends JFrame implements ListSelectionListener, Act
 		panelCentral.add(panelInfo, BorderLayout.CENTER);
 		GridBagLayout gbl_panelInfo = new GridBagLayout();
 		gbl_panelInfo.columnWidths = new int[]{131, 133, 124, 127, 0};
-		gbl_panelInfo.rowHeights = new int[]{47, 45, 46, 31, 46, 300, 0};
+		gbl_panelInfo.rowHeights = new int[]{47, 45, 46, 31, 51, 418, 0};
 		gbl_panelInfo.columnWeights = new double[]{1.0, 1.0, 0.0, 1.0, Double.MIN_VALUE};
 		gbl_panelInfo.rowWeights = new double[]{1.0, 1.0, 1.0, 0.0, 1.0, 1.0, Double.MIN_VALUE};
 		panelInfo.setLayout(gbl_panelInfo);
@@ -762,10 +763,15 @@ public class ventanaUsuario extends JFrame implements ListSelectionListener, Act
 		{
 			if(listaFiltrar==1)
 			{
-				if(textoBusquedaCocina.getText().equals("")||textoBusquedaEstado.getText().equals(""))
+				if(textoBusquedaCocina.getText().equals("")&&textoBusquedaEstado.getText().equals(""))
+				{
+					Restaurante[] restaurantes = consultorAct.darUsuarioActual().mostrarTodosFavoritos();
+					refrescarListaFavoritos(restaurantes);
+				}
+				else if((textoBusquedaCocina.getText().equals("")==false&&textoBusquedaEstado.getText().equals(""))||(textoBusquedaCocina.getText().equals("")&&textoBusquedaEstado.getText().equals("")==false))
 				{
 					try {
-						throw new Exception("Debe llenar todos los campos de busqueda.");
+						throw new Exception("Debe colocar todos los criterios de busqueda o dejar los espacios en blanco.");
 					} catch (Exception e1) {
 						// TODO Auto-generated catch block
 						JOptionPane.showMessageDialog(this, e1.getMessage());
@@ -773,6 +779,7 @@ public class ventanaUsuario extends JFrame implements ListSelectionListener, Act
 				}
 				else
 				{
+					
 					Restaurante[] restaurantes = consultorAct.darUsuarioActual().filtrarFavoritoPorEstadoCocina(textoBusquedaEstado.getText(), textoBusquedaCocina.getText());
 					refrescarListaFavoritos(restaurantes);
 				}
