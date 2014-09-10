@@ -1,6 +1,8 @@
 package mundo;
 
-public class Cocina 
+import java.io.Serializable;
+
+public class Cocina implements Serializable
 {
 	
 	private int cantidad;

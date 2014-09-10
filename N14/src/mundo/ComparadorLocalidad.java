@@ -1,9 +1,15 @@
 package mundo;
 
+import java.io.Serializable;
 import java.util.Comparator;
 
-public class ComparadorLocalidad implements Comparator<Restaurante >
+public class ComparadorLocalidad implements Comparator<Restaurante >,Serializable
 {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	@Override
 	public int compare(Restaurante o1, Restaurante o2) 

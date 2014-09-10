@@ -33,6 +33,13 @@ import java.awt.Component;
 import javax.swing.SwingConstants;
 
 import java.awt.Point;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 import javax.swing.JPasswordField;
 
@@ -78,12 +85,19 @@ public class ventanaInicial extends JFrame {
 	 * Create the frame.
 	 */
 	public ventanaInicial() {
-		aplicacion = new ConsultorRestaurantes();
-		aplicacion.cargarXLS();
+		
+		File arch = new File("./datos/consultorData.datos");
+
+		try {
+			aplicacion = new ConsultorRestaurantes(arch);
+		} catch (Exception e1) {
+			JOptionPane.showMessageDialog(this, e1.getMessage());
+		}
+
 		setTitle("RestauApp");
 		setResizable(false);
 		setSize(new Dimension(300, 300));
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		panelPrincipal = new JPanel();
 		panelPrincipal.setSize(new Dimension(300, 150));
 		panelPrincipal.setOpaque(false);
@@ -253,6 +267,18 @@ public class ventanaInicial extends JFrame {
 	public ConsultorRestaurantes darDirectorio()
 	{
 		return aplicacion;
+	}
+	
+	public void dispose() 
+	{
+		try {
+			aplicacion.guardar();
+			super.dispose();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			JOptionPane.showMessageDialog(this, "no se guardo");
+			super.dispose();
+		}
 	}
 	
 

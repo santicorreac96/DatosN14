@@ -2,6 +2,7 @@ package mundo;
 
 import java.awt.Container;
 import java.awt.Dialog.ModalExclusionType;
+import java.io.Serializable;
 
 import javax.swing.JFrame;
 
@@ -13,18 +14,20 @@ import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.general.PieDataset;
 import org.jfree.ui.ApplicationFrame;
 
-import estructuraDatos.IListaEncadenadaDoble;
+import estructuraDeDatos.IListaEncadenadaDoble;
 
 
 
-public class creadorGraficoPie extends JFrame
+
+
+public class creadorGraficoPie extends JFrame implements Serializable
 {
 	private String titulo;
 
 	public creadorGraficoPie(String title, IListaEncadenadaDoble<Categoria> lista)
 	{
 		super(title);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		titulo = title;
 		setSize(400, 400);
 		this.setContentPane(new ChartPanel(crearGrafica(crearDatos(lista))));

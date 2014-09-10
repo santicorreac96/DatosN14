@@ -1,18 +1,34 @@
 package mundo;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 
-import estructuraDatos.IListaEncadenadaDoble;
-import estructuraDatos.ListaEncadenadaDoble;
+import javax.swing.JOptionPane;
+
+
+
+
+import estructuraDeDatos.IListaEncadenadaDoble;
 import estructuraDeDatos.ITablaHash;
+import estructuraDeDatos.ListaEncadenadaDoble;
 import estructuraDeDatos.TablaHash;
 import jxl.Cell;
 import jxl.Sheet;
 import jxl.Workbook;
 
-public class ConsultorRestaurantes implements IConsultorRestaurantes
+public class ConsultorRestaurantes implements IConsultorRestaurantes,Serializable
 {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	public static final Object CONTRASENA_ADMIN = "RESTAU-ADMIN";
 	private ITablaHash<Restaurante, String> tablaIdentifcadorCompuesto;
 	private ITablaHash<Restaurante, String> tablaLocalidadEstado;
@@ -25,7 +41,7 @@ public class ConsultorRestaurantes implements IConsultorRestaurantes
 	private IListaEncadenadaDoble<Categoria> listaOrdenadaCategorias;
 	private IListaEncadenadaDoble<Cocina> listaOrdenadaCocinas;
 
-	public ConsultorRestaurantes()
+	public ConsultorRestaurantes(File arch) throws Exception
 	{
 		tablaIdentifcadorCompuesto  = new TablaHash<Restaurante, String>();
 		tablaLocalidadEstado  =new TablaHash<Restaurante, String>();
@@ -35,7 +51,48 @@ public class ConsultorRestaurantes implements IConsultorRestaurantes
 		categoriasRestaurante = new Categoria[38];
 		listaOrdenadaCategorias = new ListaEncadenadaDoble<Categoria>();
 		listaOrdenadaCocinas = new ListaEncadenadaDoble<Cocina>();
-		registrados = new ListaEncadenadaDoble<Usuario>();
+
+		if(arch.exists())
+		{
+			try {
+				ObjectInputStream in = new ObjectInputStream(new FileInputStream(arch));
+				tablaIdentifcadorCompuesto  = (ITablaHash<Restaurante, String>) in.readObject();
+				tablaLocalidadEstado  =(ITablaHash<Restaurante, String>) in.readObject();
+				restauranteArregloPrueba = (Restaurante[]) in.readObject();
+				registrados = (IListaEncadenadaDoble<Usuario>) in.readObject();
+				categoriasRestaurante = (Categoria[]) in.readObject();
+				cocinasRestaurante = (Cocina[]) in.readObject();
+				usuarioRegistradoActual = (Usuario) in.readObject();
+				listaOrdenadaCategorias = (IListaEncadenadaDoble<Categoria>) in.readObject();
+				listaOrdenadaCocinas = (IListaEncadenadaDoble<Cocina>) in.readObject();
+				in.close();
+			} catch (Exception e) {
+				tablaIdentifcadorCompuesto  = new TablaHash<Restaurante, String>();
+				tablaLocalidadEstado  =new TablaHash<Restaurante, String>();
+				restauranteArregloPrueba = new Restaurante[5000];
+				indiceActual = 0;
+				cocinasRestaurante = new Cocina[2310];
+				categoriasRestaurante = new Categoria[38];
+				listaOrdenadaCategorias = new ListaEncadenadaDoble<Categoria>();
+				listaOrdenadaCocinas = new ListaEncadenadaDoble<Cocina>();
+				registrados = new ListaEncadenadaDoble<Usuario>();
+				usuarioRegistradoActual = null;
+				throw new Exception("no se cargo bien");
+			} 
+		}
+		else
+		{
+			tablaIdentifcadorCompuesto  = new TablaHash<Restaurante, String>();
+			tablaLocalidadEstado  =new TablaHash<Restaurante, String>();
+			restauranteArregloPrueba = new Restaurante[5000];
+			indiceActual = 0;
+			cocinasRestaurante = new Cocina[2310];
+			categoriasRestaurante = new Categoria[38];
+			listaOrdenadaCategorias = new ListaEncadenadaDoble<Categoria>();
+			listaOrdenadaCocinas = new ListaEncadenadaDoble<Cocina>();
+			registrados = new ListaEncadenadaDoble<Usuario>();
+		}
+		
 	}
 
 	@Override
@@ -75,8 +132,8 @@ public class ConsultorRestaurantes implements IConsultorRestaurantes
 				cocina = cocina.replace("]", "");
 				String[] tags2 = cocina.split(",");
 				Restaurante r = new Restaurante(nombre, ciudad, estado,direccion,post,telefono,fax,latitud,longitud,barrio,web,email,categoria,horario,cocina,indiceActual);
-				tablaIdentifcadorCompuesto.agregar(r, r.getID(), new comparadorRestaurantes());
-				tablaLocalidadEstado.agregar(r, r.getCiudad()+"-"+r.getEstado(), new comparadorRestaurantes());
+				tablaIdentifcadorCompuesto.agregar(r, r.getID(),r.getID(), new comparadorRestaurantesID());
+				tablaLocalidadEstado.agregar(r, r.getCiudad()+"-"+r.getEstado(),r.getID(), new comparadorRestaurantesID());
 				darCategoriasPopulares(tags);
 				darCocinasPopulares(tags2,r.getEstado());
 				restauranteArregloPrueba[indiceActual] = r;
@@ -90,10 +147,7 @@ public class ConsultorRestaurantes implements IConsultorRestaurantes
 		}
 		
 	}
-	
-	public static void main(String[] args) {		ConsultorRestaurantes r =  new ConsultorRestaurantes();
-		r.cargarXLS();		
-	}
+
 
 	public Restaurante[] darRestaurantesPrueba()
 	{
@@ -190,9 +244,9 @@ public class ConsultorRestaurantes implements IConsultorRestaurantes
 		while(ini!=null)
 		{
 			restauranteArregloPrueba[ini.getPos()] = null;
-			tablaIdentifcadorCompuesto.eliminar(ini.getID(), new comparadorRestaurantes());
+			tablaIdentifcadorCompuesto.eliminar(ini.getID(),ini.getID(), new comparadorRestaurantesID());
 			String[] c = ini.getID().split("-");
-			tablaLocalidadEstado.eliminar(c[1]+"-"+c[2], new comparadorRestaurantes());
+			tablaLocalidadEstado.eliminar(c[1]+"-"+c[2],ini.getID(),new comparadorRestaurantesID());
 			String[] tipsCocina = ini.getCocina().split(",");
 			String[] tipsCategoria = ini.getCategoria().split(",");
 			for(int i =  0; i <tipsCocina.length;i++)
@@ -369,6 +423,36 @@ public class ConsultorRestaurantes implements IConsultorRestaurantes
 			return respuesta;			
 		}
 		
+
+		public ITablaHash<Restaurante, String> getTablaIdentifcadorCompuesto() {
+			return tablaIdentifcadorCompuesto;
+		}
+
+		public ITablaHash<Restaurante, String> getTablaLocalidadEstado() {
+			return tablaLocalidadEstado;
+		}
+
+		public void guardar() throws Exception
+		{
+			try
+			{
+				ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(new File("./datos/consultorData.datos")));
+	    		out.writeObject(tablaIdentifcadorCompuesto);
+	    		out.writeObject(tablaLocalidadEstado);
+	    		out.writeObject(restauranteArregloPrueba);
+	    		out.writeObject(registrados);
+	    		out.writeObject(categoriasRestaurante);
+	    		out.writeObject(cocinasRestaurante);
+	    		out.writeObject(usuarioRegistradoActual);
+	    		out.writeObject(listaOrdenadaCategorias);
+	    		out.writeObject(listaOrdenadaCocinas);
+	    		out.close();
+			}
+			catch(Exception e)
+			{
+				throw new Exception("No se guardo");
+			}
+		}
 		
 
 }

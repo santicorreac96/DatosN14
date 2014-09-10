@@ -1,14 +1,22 @@
 package estructuraDeDatos;
 
-public class CeldaTabla<E,K extends String> implements ICeldaTabla<E, K >
+import java.io.Serializable;
+
+public class CeldaTabla<E,K extends String> implements ICeldaTabla<E, K >, Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private E elementoActual;
-	
+	private K id;
 	private K llave;
 
-	public CeldaTabla(E nElemento, K nLlave) 
+	public CeldaTabla(E nElemento,K nid, K nLlave) 
 	{
 		elementoActual = nElemento;
+		id = nid;
 		llave = nLlave;
 	}
 
@@ -22,6 +30,11 @@ public class CeldaTabla<E,K extends String> implements ICeldaTabla<E, K >
 	public K darLlave() {
 		// TODO Auto-generated method stub
 		return llave;
+	}
+	
+	public K darID()
+	{
+		return id;
 	}
 
 

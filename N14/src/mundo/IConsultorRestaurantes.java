@@ -1,8 +1,11 @@
 package mundo;
 
-import estructuraDatos.IListaEncadenadaDoble;
+import java.io.Serializable;
 
-public interface IConsultorRestaurantes
+import estructuraDeDatos.IListaEncadenadaDoble;
+
+
+public interface IConsultorRestaurantes 
 {
 	
 	/**

@@ -1,14 +1,20 @@
 package estructuraDeDatos;
 
+import java.io.Serializable;
 import java.util.Comparator;
 
 import mundo.comparadorID;
-import estructuraDatos.IListaEncadenadaDoble;
-import estructuraDatos.ListaEncadenadaDoble;
+import mundo.comparadorRestaurantesID;
 
-public class TablaHash<E,K extends String> implements ITablaHash<E, K >
+
+public class TablaHash<E,K extends String> implements ITablaHash<E, K >,Serializable
 {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private  IListaEncadenadaDoble<CeldaTabla<E, K>>[] celdas;
 
 	private int cantidadElementos;
@@ -29,12 +35,12 @@ public class TablaHash<E,K extends String> implements ITablaHash<E, K >
 
 	}
 
-	public void agregar(E nElemento, K nLlave, Comparator<CeldaTabla<E, K>> comparador) 
+	public void agregar(E nElemento, K nLlave, K id,Comparator<CeldaTabla<E, K>> comparador) 
 	{
 
 		comparadorAgregar = comparador;
 		int pos = funcion(nLlave);
-		CeldaTabla<E,K> celdaMeter = new CeldaTabla(nElemento, nLlave);
+		CeldaTabla<E,K> celdaMeter = new CeldaTabla(nElemento,id, nLlave);
 		celdas[pos].adicionar(celdaMeter, comparador);
 		cantidadElementos++;
 		if(cantidadElementos/tamano>0.8)
@@ -44,20 +50,20 @@ public class TablaHash<E,K extends String> implements ITablaHash<E, K >
 	}
 
 	@Override
-	public E darElemento(K pLlave, Comparator<CeldaTabla<E, K>> comparador) 
+	public E darElemento(K pLlave, K id, Comparator<CeldaTabla<E, K>> comparador) 
 	{
 		int pos = funcion(pLlave);
-		CeldaTabla<E,K> buscada = new CeldaTabla(null, pLlave);
+		CeldaTabla<E,K> buscada = new CeldaTabla(null, id ,pLlave);
 		CeldaTabla<E,K> encontrada = celdas[pos].buscarElemento(buscada, comparador);
 		return encontrada.darElemento();
 		
 	}
 
 	@Override
-	public void  eliminar(K pLlave, Comparator<CeldaTabla<E, K>> comparador) throws Exception 
+	public void  eliminar(K pLlave,K id, Comparator<CeldaTabla<E, K>> comparador) throws Exception 
 	{
 		int pos = funcion(pLlave);
-		CeldaTabla<E,K> buscada = new CeldaTabla(null, pLlave);
+		CeldaTabla<E,K> buscada = new CeldaTabla(null,id, pLlave);
 		CeldaTabla<E,K> encontrada = celdas[pos].buscarElemento(buscada, comparador);
 		celdas[pos].eliminar(encontrada, comparador);
 		cantidadElementos--;
@@ -100,18 +106,18 @@ public class TablaHash<E,K extends String> implements ITablaHash<E, K >
 			{
 				reshash.volverActualPrimero();
 				CeldaTabla<E, K> act = reshash.darActual();
-				agregar(act.darElemento(), act.darLlave(), comparadorAgregar);
+				agregar(act.darElemento(), act.darLlave(), act.darID(),comparadorAgregar);
 				act = anterior[i].adelantarse();
 				while(act !=null)
 				{
-					agregar(act.darElemento(), act.darLlave(), comparadorAgregar);
+					agregar(act.darElemento(), act.darLlave(),act.darID() ,comparadorAgregar);
 					act = anterior[i].adelantarse();
 				}
 			}
 		}
 	}
 
-	public IListaEncadenadaDoble darLista(K pLlave, Comparator<E> comparador)
+	public IListaEncadenadaDoble<E> darLista(K pLlave, Comparator<E> comparador)
 	{
 		IListaEncadenadaDoble<E> resp = new ListaEncadenadaDoble<E>();
 		int pos = funcion(pLlave);

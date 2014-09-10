@@ -1,9 +1,15 @@
 package mundo;
 
+import java.io.Serializable;
 import java.util.Comparator;
 
-public class comparadorCantidadCategorias implements Comparator<Categoria>
+public class comparadorCantidadCategorias implements Comparator<Categoria> ,Serializable
 {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	@Override
 	public int compare(Categoria arg0, Categoria arg1) 

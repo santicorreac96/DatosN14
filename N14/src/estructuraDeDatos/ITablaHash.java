@@ -1,10 +1,10 @@
 package estructuraDeDatos;
 
+import java.io.Serializable;
 import java.util.Comparator;
 
-import estructuraDatos.IListaEncadenadaDoble;
 
-public interface ITablaHash <E,K extends String>
+public interface ITablaHash <E,K extends String> extends Serializable
 {
 	
 /**
@@ -14,7 +14,7 @@ public interface ITablaHash <E,K extends String>
  * @param comparador El comparador para ubicar el objeto en la lista
  * @return
  */
-public abstract void agregar(E nElemento, K nLlave,Comparator<CeldaTabla<E, K>> comparador);
+public abstract void agregar(E nElemento, K nLlave,K id,Comparator<CeldaTabla<E, K>> comparador);
 	
 	/**
 	 * Metodo que retorna un elemento de la tabla de hash
@@ -22,7 +22,7 @@ public abstract void agregar(E nElemento, K nLlave,Comparator<CeldaTabla<E, K>> 
 	 * @param comparador Comparador utilizado para encontrar el elemento en la lista.
 	 * @return El elemento buscado.
 	 */
-	public abstract E darElemento(K pLlave, Comparator<CeldaTabla<E, K>> comparador) ;
+	public abstract E darElemento(K pLlave,K id ,Comparator<CeldaTabla<E, K>> comparador) ;
 	
 	/**
 	 * metodo que permite eliminar un elemento de la tabla de hash
@@ -30,7 +30,7 @@ public abstract void agregar(E nElemento, K nLlave,Comparator<CeldaTabla<E, K>> 
 	 * @param comparador Comparador utilizado para encontrar el elemento en la lista.
 	 * @throws Exception Si no hay elementos en la lista a eliminar.
 	 */
-	public abstract void eliminar(K pLlave, Comparator<CeldaTabla<E, K>> comparador) throws Exception ;
+	public abstract void eliminar(K pLlave, K id, Comparator<CeldaTabla<E, K>> comparador) throws Exception ;
 	
 	/**
 	 * Metodo que retorna la cantidad total de elementos en la tabla

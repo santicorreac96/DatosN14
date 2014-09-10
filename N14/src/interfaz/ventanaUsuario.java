@@ -131,7 +131,6 @@ public class ventanaUsuario extends JFrame implements ListSelectionListener, Act
 	private JTextField txtGraficoEstado;
 	private JLabel lblEstado_1;
 	private JButton botonEliminarBusqued;
-	private JButton btnEliminarFavorito;
 
 
 	/**
@@ -141,8 +140,8 @@ public class ventanaUsuario extends JFrame implements ListSelectionListener, Act
 		consultorAct=cons;
 		setSize(new Dimension(1000, 720));
 		setResizable(false);
-		setTitle("RESTAU-Usuario");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setTitle("Catalogo del Usuario:" + consultorAct.darUsuarioActual().darNombre());
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		panelPrincipal = new JPanel();
 		panelPrincipal.setBorder(new EmptyBorder(5, 5, 5, 5));
 		panelPrincipal.setLayout(new BorderLayout(0, 0));
@@ -336,14 +335,6 @@ public class ventanaUsuario extends JFrame implements ListSelectionListener, Act
 		gbc_btnNoFavorito.gridx = 0;
 		gbc_btnNoFavorito.gridy = 1;
 		panelBotonesFAV.add(btnNoFavorito, gbc_btnNoFavorito);
-		
-		btnEliminarFavorito = new JButton("Eliminar");
-		GridBagConstraints gbc_btnEliminarFavorito = new GridBagConstraints();
-		gbc_btnEliminarFavorito.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btnEliminarFavorito.insets = new Insets(0, 0, 5, 0);
-		gbc_btnEliminarFavorito.gridx = 0;
-		gbc_btnEliminarFavorito.gridy = 2;
-		panelBotonesFAV.add(btnEliminarFavorito, gbc_btnEliminarFavorito);
 		btnFavorito.setActionCommand("fav");
 		GridBagConstraints gbc_btnFavorito = new GridBagConstraints();
 		gbc_btnFavorito.insets = new Insets(0, 0, 5, 0);
@@ -353,6 +344,8 @@ public class ventanaUsuario extends JFrame implements ListSelectionListener, Act
 		panelBotonesFAV.add(btnFavorito, gbc_btnFavorito);
 		
 		botonEliminarBusqued = new JButton("Eliminar");
+		botonEliminarBusqued.addActionListener(this);
+		botonEliminarBusqued.setActionCommand("eli");
 		GridBagConstraints gbc_botonEliminarBusqued = new GridBagConstraints();
 		gbc_botonEliminarBusqued.insets = new Insets(0, 0, 5, 0);
 		gbc_botonEliminarBusqued.fill = GridBagConstraints.HORIZONTAL;
@@ -659,6 +652,8 @@ public class ventanaUsuario extends JFrame implements ListSelectionListener, Act
 		//scrool.setViewportView(pane);
 		panelMapa.setLayout(new BorderLayout());
 		panelMapa.add(scrool, BorderLayout.CENTER);
+		
+		refrescarListaFavoritos(consultorAct.darUsuarioActual().mostrarTodosFavoritos());
 	}
 
 	public void setPrincipal(ventanaInicial pPrincipal) 
@@ -814,6 +809,47 @@ public class ventanaUsuario extends JFrame implements ListSelectionListener, Act
 				refrescarListaFavoritos(consultorAct.darUsuarioActual().mostrarTodosFavoritos());
 			}
 		}
+		else if(comando.equals(btnNoFavorito.getActionCommand()))
+		{
+			if(listaFavoritos.getSelectedValue()!=null)
+			{
+				try {
+					consultorAct.darUsuarioActual().eliminarFavorito((Restaurante) listaFavoritos.getSelectedValue());
+				} catch (Exception e1) {
+					System.out.println("");
+				}
+				refrescarListaFavoritos(consultorAct.darUsuarioActual().mostrarTodosFavoritos());
+			}
+		}
+		else if(comando.equals(botonEliminarBusqued.getActionCommand()))
+		{
+			Restaurante r = (Restaurante) listaBusqueda.getSelectedValue();
+			String  id = r.getID();
+			try {
+				consultorAct.eliminarRestaurante(id );
+			} catch (Exception e2) {
+				System.out.println("");
+			}
+			if(textoBusquedaNombre.getText().equals("")&&textoBusquedaEstado.getText().equals("")==false&&textoBusquedaCiudad.getText().equals("")==false)
+			{
+				Restaurante[] restaurantes = consultorAct.crearArregloPorLocacion(textoBusquedaEstado.getText(), textoBusquedaCiudad.getText());
+				refrescarListaBusqueda(restaurantes);
+			}
+			else if(textoBusquedaNombre.getText().equals("")||textoBusquedaEstado.getText().equals("")||textoBusquedaCiudad.getText().equals(""))
+			{
+				try {
+					throw new Exception("Debe llenar todos los campos de busqueda.");
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					JOptionPane.showMessageDialog(this, e1.getMessage());
+				}
+			}
+			else
+			{
+				Restaurante[] restaurantes = consultorAct.crearArregloPorId(textoBusquedaNombre.getText()+"-"+textoBusquedaCiudad.getText()+"-"+textoBusquedaEstado.getText());
+				refrescarListaBusqueda(restaurantes);
+			}
+		}
 	}
 	
 	public void crearArchivoMapa(String longitud , String latitud)
@@ -851,6 +887,12 @@ public class ventanaUsuario extends JFrame implements ListSelectionListener, Act
 
 		}
 
+	}
+	
+	public void dispose() 
+	{
+		principal.setVisible(true);
+		super.dispose();
 	}
 
 }

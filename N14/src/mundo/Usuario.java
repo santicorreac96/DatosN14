@@ -1,11 +1,17 @@
 package mundo;
 
+import java.io.Serializable;
+
 import estructuraDatos.IListaEncadenadaDoble;
 import estructuraDatos.ListaEncadenadaDoble;
 
-public class Usuario extends Persona
+public class Usuario extends Persona implements Serializable
 {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	public final static int CEDULA =1;
 	public final static int USER  =2;
 	

@@ -1,8 +1,15 @@
 package mundo;
 
-public class Restaurante
+import java.io.Serializable;
+
+public class Restaurante implements Serializable
 {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private String nombre;
 	
 	private String ciudad;

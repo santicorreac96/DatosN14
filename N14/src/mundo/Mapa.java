@@ -1,27 +1,13 @@
 package mundo;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-
-
-
-
-
-
-
-
-import javax.swing.border.TitledBorder;
-
-import com.sun.javafx.application.PlatformImpl;
-
-import javafx.application.Application;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.layout.HBox;
-import javafx.scene.web.WebEngine;
-import javafx.scene.web.WebView;
-import javafx.stage.Stage;
+
+import javax.swing.border.TitledBorder;
+
+import com.sun.javafx.application.PlatformImpl;
 
 public class Mapa 
 {

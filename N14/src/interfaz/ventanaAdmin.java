@@ -60,7 +60,7 @@ public class ventanaAdmin extends JFrame implements ListSelectionListener
 		setSize(new Dimension(500, 500));
 		setResizable(false);
 		setTitle("RESTAU-Administrador");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		panelPrincipal = new JPanel();
 		panelPrincipal.setBorder(new EmptyBorder(5, 5, 5, 5));
 		panelPrincipal.setLayout(new BorderLayout(0, 0));
@@ -92,10 +92,9 @@ public class ventanaAdmin extends JFrame implements ListSelectionListener
 		JButton btnEliminar = new JButton("Eliminar");
 		btnEliminar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if(listaRestaurantes.getSelectedIndex()!=-1)
+				if(listaRestaurantes.getSelectedValue()!=null)
 				{
 					try {
-						System.out.println(listaRestaurantes.getSelectedIndex());
 						Restaurante r = (Restaurante) listaRestaurantes.getSelectedValue();
 						String  id = r.getID();
 						mundoActual.eliminarRestaurante(id );
@@ -116,18 +115,30 @@ public class ventanaAdmin extends JFrame implements ListSelectionListener
 		panelRestaurantes.setBorder(new TitledBorder(null, "Lista Restaurantes", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panelRestaurantes.setSize(new Dimension(200, 700));
 		panelPrincipal.add(panelRestaurantes, BorderLayout.CENTER);
+		panelRestaurantes.setLayout(null);
 		
 		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setMaximumSize(new Dimension(300, 200));
+		scrollPane.setMinimumSize(new Dimension(300, 200));
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		scrollPane.setBounds(326, 25, -302, 415);
+		scrollPane.setBounds(10, 21, 325, 429);
 		panelRestaurantes.add(scrollPane);
 		
 		listaRestaurantes = new JList();
+		listaRestaurantes.setSize(new Dimension(400, 300));
 		listaRestaurantes.setVisibleRowCount(25);
 		listaRestaurantes.addListSelectionListener(this);
 		listaRestaurantes.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		scrollPane.setViewportView(listaRestaurantes);
+		
+		if(mundoActual.darRestaurantesPrueba()[0]!=null)
+		{
+			refrescarLista(mundoActual.darRestaurantesPrueba());
+			scrollPane.setViewportView(listaRestaurantes);
+			revalidate();
+			repaint();
+		}
 	}
 	
 	public void setPrincipal (ventanaInicial pPrincipal)
@@ -156,6 +167,13 @@ public class ventanaAdmin extends JFrame implements ListSelectionListener
 	{
 		// TODO Auto-generated method stub
 		
+	}
+	
+	@Override
+	public void dispose() 
+	{
+		principal.setVisible(true);
+		super.dispose();
 	}
 }
 

@@ -11,21 +11,21 @@ public class CeldaTablaTest extends TestCase
 	
 	public void testDarElemento()
 	{
-		test = new CeldaTabla<Restaurante, String>(null, null);
+		test = new CeldaTabla<Restaurante, String>(null, null,null);
 		assertNull(test.darElemento());
 		assertNull(test.darLlave());
 		Restaurante r = new Restaurante("", "", "", "", "", "", "", "", "", "", "", "", "", "", "",0);
-		test  = new CeldaTabla<Restaurante, String>(r, r.getID());
+		test  = new CeldaTabla<Restaurante, String>(r, r.getID(),r.getID());
 		assertEquals(r, test.darElemento());
 	}
 	
 	public void testDarLlave()
 	{
-		test = new CeldaTabla<Restaurante, String>(null, null);
+		test = new CeldaTabla<Restaurante, String>(null, null,null);
 		assertNull(test.darElemento());
 		assertNull(test.darLlave());
 		Restaurante r = new Restaurante("r", "a", "b", "", "", "", "", "", "", "", "", "", "", "", "",0);
-		test  = new CeldaTabla<Restaurante, String>(r, r.getID());
+		test  = new CeldaTabla<Restaurante, String>(r, r.getID(),r.getID());
 		assertEquals(r.getID(), test.darLlave());
 	}
 

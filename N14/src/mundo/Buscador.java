@@ -1,6 +1,7 @@
 package mundo;
 
 import java.io.File;
+import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -9,7 +10,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 
-public class Buscador extends Region
+public class Buscador extends Region 
 {
 	public Buscador(HBox nueva)
 	{

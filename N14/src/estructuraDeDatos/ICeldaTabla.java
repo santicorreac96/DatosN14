@@ -1,6 +1,8 @@
 package estructuraDeDatos;
 
-public interface ICeldaTabla <E,K extends String>
+import java.io.Serializable;
+
+public interface ICeldaTabla <E,K extends String> extends Serializable
 {
 	
 	/**
@@ -14,6 +16,9 @@ public interface ICeldaTabla <E,K extends String>
 	 * @return la llave del elemento
 	 */
 	public abstract K darLlave();
+	
+	
+	public abstract K darID();
 
 	
 	

@@ -1,5 +1,7 @@
 package mundo;
 
+import java.io.Serializable;
+
 import javax.swing.JFrame;
 
 import org.jfree.chart.ChartFactory;
@@ -13,10 +15,16 @@ import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.general.PieDataset;
 import org.jfree.ui.ApplicationFrame;
 
-import estructuraDatos.IListaEncadenadaDoble;
+import estructuraDeDatos.IListaEncadenadaDoble;
 
-public class creadorGraficoBarras extends JFrame
+
+
+public class creadorGraficoBarras extends JFrame implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String titulo;
 	private String est;
 
@@ -25,7 +33,7 @@ public class creadorGraficoBarras extends JFrame
 		titulo = title;
 		est = estado;
 		setSize(400, 400);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setContentPane(new ChartPanel(crearGrafica(crearDatos(lista))));
 		// TODO Auto-generated constructor stub
 	}
@@ -55,7 +63,7 @@ public class creadorGraficoBarras extends JFrame
 	
 	public void dispose()
 	{
-		this.dispose();
+		super.dispose();
 	}
 
 }
