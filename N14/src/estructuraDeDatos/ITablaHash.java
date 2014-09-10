@@ -39,6 +39,12 @@ public abstract void agregar(E nElemento, K nLlave,K id,Comparator<CeldaTabla<E,
 	public abstract int darCantidadElementos();
 	
 	
+	/**
+	 * Metodo que retorna la lista guardada
+	 * @param pLlave La llave utiliada para acceder
+	 * @param comparador el comparador utilizado
+	 * @return
+	 */
 	public abstract IListaEncadenadaDoble darLista(K pLlave, Comparator<E> comparador);
 
 

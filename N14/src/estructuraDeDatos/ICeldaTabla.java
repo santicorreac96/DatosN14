@@ -18,6 +18,10 @@ public interface ICeldaTabla <E,K extends String> extends Serializable
 	public abstract K darLlave();
 	
 	
+	/**
+	 * metodo que da la ID del elemento
+	 * @return
+	 */
 	public abstract K darID();
 
 	

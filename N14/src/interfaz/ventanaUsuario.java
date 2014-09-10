@@ -68,6 +68,8 @@ import javax.swing.JList;
 import javax.swing.JRadioButton;
 import javax.swing.SwingConstants;
 
+
+
 public class ventanaUsuario extends JFrame implements ListSelectionListener, ActionListener
 {
 
@@ -357,24 +359,12 @@ public class ventanaUsuario extends JFrame implements ListSelectionListener, Act
 		panelCentral = new JPanel();
 		panelCentralGeneral.add(panelCentral, BorderLayout.CENTER);
 		panelCentral.setLayout(new BorderLayout(0, 0));
-		
-		panelTitulo = new JPanel();
-		panelTitulo.setPreferredSize(new Dimension(80, 100));
-		panelCentral.add(panelTitulo, BorderLayout.NORTH);
-		GridBagLayout gbl_panelTitulo = new GridBagLayout();
-		gbl_panelTitulo.columnWidths = new int[]{695, 0};
-		gbl_panelTitulo.rowHeights = new int[]{100, 0};
-		gbl_panelTitulo.columnWeights = new double[]{0.0, Double.MIN_VALUE};
-		gbl_panelTitulo.rowWeights = new double[]{0.0, Double.MIN_VALUE};
-		panelTitulo.setLayout(gbl_panelTitulo);
-		
-		lblRestauapp = new JLabel("RestauApp!");
-		lblRestauapp.setFont(new Font("Tahoma", Font.PLAIN, 30));
-		GridBagConstraints gbc_lblRestauapp = new GridBagConstraints();
-		gbc_lblRestauapp.gridx = 0;
-		gbc_lblRestauapp.gridy = 0;
-		panelTitulo.add(lblRestauapp, gbc_lblRestauapp);
-		
+		//TODO
+		JLabel label = new JLabel("Catalogo restaurantes");
+		label.setFont(new Font("Tahoma", Font.PLAIN, 30));
+		label.setHorizontalAlignment(SwingConstants.CENTER);
+		panelCentral.add(label, BorderLayout.NORTH);
+
 		panelBotonesGraficas = new JPanel();
 		panelBotonesGraficas.setBorder(new TitledBorder(null, "Gr\u00E1ficas", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panelCentral.add(panelBotonesGraficas, BorderLayout.WEST);
@@ -650,7 +640,7 @@ public class ventanaUsuario extends JFrame implements ListSelectionListener, Act
 		
 		pane = new JFXPanel();
 		JScrollPane scrool = new JScrollPane();
-		//scrool.setViewportView(pane);
+//		scrool.setViewportView(pane);
 		panelMapa.setLayout(new BorderLayout());
 		panelMapa.add(scrool, BorderLayout.CENTER);
 		

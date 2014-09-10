@@ -9,6 +9,7 @@ public interface IListaEncadenadaDoble<T>
 	/**
 	 * Metodo que adiciona un elemento ordenado a la lista
 	 * @param elemento El elemento a adicionar
+	 * @param comparador El comparador utilizado
 	 * post: se adiciono el elemento de forma ordenada
 	 */
 	public abstract void adicionar(T elemento,  Comparator<T> comparador);
@@ -23,6 +24,7 @@ public interface IListaEncadenadaDoble<T>
 	 * Metodo que busca un elemento 
 	 * pre: La lista tiene elementos
 	 * @param buscado el elemento a buscar
+	 * @param comparador El comparador utilizado
 	 * @return el elemento buscado 
 	 */
 	public abstract T buscarElemento(T buscado, Comparator<T> comparador);
@@ -32,6 +34,7 @@ public interface IListaEncadenadaDoble<T>
 	/**
 	 * Metodo que elimina un elemento de la lista
 	 * @param elemento el elemento a eliminar
+	 * @param comparador El comparador utilizado
 	 * @throws Exception Si no existen elementos
 	 * post: Se elimino el elemento de la lista si esta lo tenia
 	 */
