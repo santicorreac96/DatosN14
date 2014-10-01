@@ -88,7 +88,7 @@ public class ventanaUsuario extends JFrame implements ListSelectionListener, Act
 	private JLabel lblRestauapp;
 	private JPanel panelBotonesGraficas;
 	private JButton btnGraficaTipos;
-	private JButton btnGráficaCategorias;
+	private JButton btnGraficaCategorias;
 	private JPanel panelInfo;
 	private Label labelNombre;
 	private Label labelCiudad;
@@ -375,17 +375,17 @@ public class ventanaUsuario extends JFrame implements ListSelectionListener, Act
 		gbl_panelBotonesGraficas.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		panelBotonesGraficas.setLayout(gbl_panelBotonesGraficas);
 		
-		btnGráficaCategorias = new JButton("Gr\u00E1fica categor\u00EDas");
-		btnGráficaCategorias.addActionListener(new ActionListener() {
+		btnGraficaCategorias = new JButton("Gr\u00E1fica categor\u00EDas");
+		btnGraficaCategorias.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				new creadorGraficoPie("6 Categorías mas comunes", consultorAct.darCategorias()).setVisible(true);
+				new creadorGraficoPie("6 Categorï¿½as mas comunes", consultorAct.darCategorias()).setVisible(true);
 			}
 		});
-		GridBagConstraints gbc_btnGráficaCategorias = new GridBagConstraints();
-		gbc_btnGráficaCategorias.insets = new Insets(0, 0, 5, 0);
-		gbc_btnGráficaCategorias.gridx = 0;
-		gbc_btnGráficaCategorias.gridy = 0;
-		panelBotonesGraficas.add(btnGráficaCategorias, gbc_btnGráficaCategorias);
+		GridBagConstraints gbc_btnGraficaCategorias = new GridBagConstraints();
+		gbc_btnGraficaCategorias.insets = new Insets(0, 0, 5, 0);
+		gbc_btnGraficaCategorias.gridx = 0;
+		gbc_btnGraficaCategorias.gridy = 0;
+		panelBotonesGraficas.add(btnGraficaCategorias, gbc_btnGraficaCategorias);
 		
 		btnGraficaTipos = new JButton("Gr\u00E1fica tipos");
 		btnGraficaTipos.addActionListener(new ActionListener() {
@@ -402,7 +402,7 @@ public class ventanaUsuario extends JFrame implements ListSelectionListener, Act
 					}
 					else
 					{
-						new creadorGraficoBarras("8 tipos de cocina más comunes en: "+ txtGraficoEstado.getText()  , consultorAct.darCocinas(),txtGraficoEstado.getText()).setVisible(true);
+						new creadorGraficoBarras("8 tipos de cocina mï¿½s comunes en: "+ txtGraficoEstado.getText()  , consultorAct.darCocinas(),txtGraficoEstado.getText()).setVisible(true);
 					}
 					
 			}
@@ -430,7 +430,7 @@ public class ventanaUsuario extends JFrame implements ListSelectionListener, Act
 		txtGraficoEstado.setColumns(10);
 		
 		panelInfo = new JPanel();
-		panelInfo.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Información Restaurante", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panelInfo.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Informaciï¿½n Restaurante", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panelCentral.add(panelInfo, BorderLayout.CENTER);
 		GridBagLayout gbl_panelInfo = new GridBagLayout();
 		gbl_panelInfo.columnWidths = new int[]{131, 133, 124, 127, 0};
@@ -706,23 +706,23 @@ public class ventanaUsuario extends JFrame implements ListSelectionListener, Act
 		
 		if(txtHorario.getText().equals(""))
 		{
-			txtHorario.setText("Información No Disponible");
+			txtHorario.setText("Informaciï¿½n No Disponible");
 		}
 		if(txtCodigoPostal.getText().equals(""))
 		{
-			txtCodigoPostal.setText("Información No Disponible");
+			txtCodigoPostal.setText("Informaciï¿½n No Disponible");
 		}
 		if(txtDireccion.getText().equals(""))
 		{
-			txtDireccion.setText("Información No Disponible");
+			txtDireccion.setText("Informaciï¿½n No Disponible");
 		}
 		if(txtTelefono.getText().equals(""))
 		{
-			txtTelefono.setText("Información No Disponible");
+			txtTelefono.setText("Informaciï¿½n No Disponible");
 		}
 		if(txtWeb.getText().equals(""))
 		{
-			txtWeb.setText("Información No Disponible");
+			txtWeb.setText("Informaciï¿½n No Disponible");
 		}
 		crearArchivoMapa(visualizado.getLongitud(), visualizado.getLatitud());
 		Mapa nuevo = new Mapa(pane, visualizado.getNombre());
