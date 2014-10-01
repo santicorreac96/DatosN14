@@ -88,8 +88,6 @@ public class ventanaInicial extends JFrame {
 	public ventanaInicial() {
 		
 		File arch = new File("./datos/consultorData.datos");
-		
-		//Hola mundo!
 
 		try {
 			aplicacion = new ConsultorRestaurantes(arch);
@@ -242,7 +240,7 @@ public class ventanaInicial extends JFrame {
 		}
 		else
 		{
-			JOptionPane.showMessageDialog(this, "Contraseï¿½a incorrecta", "Informacion", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(this, "Contraseña incorrecta", "Informacion", JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
 	
@@ -250,7 +248,7 @@ public class ventanaInicial extends JFrame {
 	{
 		if(textFieldUsername.getText().equals("") || textFieldPassword.getText().equals(""))
 		{
-			JOptionPane.showMessageDialog(this, "Debe llenar toda la informaciï¿½n de verificaciï¿½n");
+			JOptionPane.showMessageDialog(this, "Debe llenar toda la información de verificación");
 		}
 		else
 		{
